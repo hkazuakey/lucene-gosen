@@ -9,7 +9,7 @@ We upload three types jar file
 * lucene-gosen-<version>-ipadic.jar : Java library with IPA dictionary.
 * lucene-gosen-<version>-naist-chasen.jar : Java library with Naist Chasen dictionary
 
-## Installation With Apache Solr 6.0.1:
+## Installation With Apache Solr 6.6.1:
 
 1. Download jar file from Maven Central Repository
 2. create <your_solr_home>/<collection_dir>/lib and put this jar file in it.
@@ -19,7 +19,7 @@ We upload three types jar file
 refer to example/ for an example japanese configuration with comments explaining
    what the various configuration options are.
 
-## Installation with Apache Lucene 6.0.1:
+## Installation with Apache Lucene 6.6.1:
 
 ### Using Maven
 
@@ -30,7 +30,7 @@ Add dependency to pom.xml.
         <dependency>
             <groupId>com.github.lucene-gosen</groupId>
             <artifactId>lucene-gosen</artifactId>
-            <version>6.0.1</version>
+            <version>6.6.1</version>
             <classifier>ipadic</classifier>
         </dependency>
         ...

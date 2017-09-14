@@ -104,11 +104,9 @@ class CostMatrixBuilder {
       for (int n = 0; n < results.size(); n++) {
         int i = results.get(n);
         ruleString = ruleList.get(i)[j];
-        if (
-            ((!parent) && (csv[j].charAt(0) == '*'))
-            || ((parent) && (ruleString.charAt(0) == '*'))
-            || ruleString.equals(csv[j])
-        )
+        if (((!parent) && (csv[j].charAt(0) == '*')) ||
+                ((parent) && (ruleString.charAt(0) == '*')) ||
+                ruleString.equals(csv[j]))
         {
           results.set(k++, i);
         }
@@ -116,6 +114,10 @@ class CostMatrixBuilder {
       results.setSize(k);
     }
 
+    if (results.size() <= 0) {
+//      results.set(k++, i);
+      System.out.println("results become zero!!");
+    }
     return results;
   }
   

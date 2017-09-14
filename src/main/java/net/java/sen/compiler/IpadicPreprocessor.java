@@ -86,8 +86,7 @@ public class IpadicPreprocessor {
    * @throws FileNotFoundException
    * @throws IOException
    */
-  public void buildConnectionCSV(String outputFilename)
-      throws UnsupportedEncodingException, FileNotFoundException, IOException {
+  public void buildConnectionCSV(String outputFilename) throws IOException {
     String regexp = "^\\("
         + "\\("
         + "(?:\\(\\(\\(([^ )]+)?(?: ([^ )]+))?(?: ([^ )]+))?(?: ([^ )]+))?\\)(?: ?([^ )]+)?(?: ([^ )]+))?(?: ([^ )]+))?)\\)\\) )?"
