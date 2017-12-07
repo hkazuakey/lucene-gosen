@@ -18,6 +18,7 @@
 package org.apache.lucene.analysis.gosen;
 
 import java.io.IOException;
+import java.util.stream.Stream;
 
 import net.java.sen.SenFactory;
 import net.java.sen.StringTagger;
@@ -83,7 +84,11 @@ public final class GosenTokenizer extends Tokenizer {
    * Constructors
    */
   public GosenTokenizer(StreamFilter filter, String dictionaryDir, boolean tokenizeUnknownKatakana) {
-    this(DEFAULT_TOKEN_ATTRIBUTE_FACTORY, filter, dictionaryDir, tokenizeUnknownKatakana);
+    this(DEFAULT_TOKEN_ATTRIBUTE_FACTORY, filter, dictionaryDir, null, tokenizeUnknownKatakana);
+  }
+
+  public GosenTokenizer(AttributeFactory factory, StreamFilter filter, String dictionaryDir, boolean tokenizeUnknownKatakana) {
+    this(factory, filter, dictionaryDir, null, tokenizeUnknownKatakana);
   }
 
   /**
@@ -92,11 +97,12 @@ public final class GosenTokenizer extends Tokenizer {
    * @param factory the AttributeFactory to use
    * @param filter stream filter
    * @param dictionaryDir lucene-gosen dictionary directory
+   * @param userDictionaryDir lucene-gosen user dictionary directory
    * @param tokenizeUnknownKatakana determine whether segmenting unknown katakana or not
    */
-  public GosenTokenizer(AttributeFactory factory, StreamFilter filter, String dictionaryDir, boolean tokenizeUnknownKatakana) {
+  public GosenTokenizer(AttributeFactory factory, StreamFilter filter, String dictionaryDir, String userDictionaryDir, boolean tokenizeUnknownKatakana) {
     super(factory);
-    StringTagger stringTagger = SenFactory.getStringTagger(dictionaryDir, tokenizeUnknownKatakana);
+    StringTagger stringTagger = SenFactory.getStringTagger(dictionaryDir, userDictionaryDir, tokenizeUnknownKatakana);
     if (filter != null) {
       stringTagger.addFilter(filter);
     }

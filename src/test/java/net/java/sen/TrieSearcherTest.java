@@ -87,6 +87,7 @@ public class TrieSearcherTest extends LuceneTestCase {
     IntBuffer intBuffer = trieBuffer.asIntBuffer();
     
     final String testString = "qwerty";
+
     CharIterator iterator = new CharIterator() {
       int i = 0;
       

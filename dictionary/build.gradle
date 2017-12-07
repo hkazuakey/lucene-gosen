@@ -25,7 +25,7 @@ def static replaceAllProperties(props) {
 def download(dictype, props) {
     String archiveFileName = props.getProperty("dic.archive")
     if (checkExistFile(dictype, archiveFileName)) {
-        println "Already archive file[" + archiveFileName + "] exists. skip donwload"
+        println "Already archive file[" + archiveFileName + "] exists. skip download"
     } else {
         // prepare directories
         project.mkdir(dictype)
