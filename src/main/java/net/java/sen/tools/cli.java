@@ -27,7 +27,7 @@ public class cli {
       return;
     }
     for (Token token : tokens) {
-      System.out.println(token.getSurface() + "\t" + getAllFeatures(token));
+      System.out.println(getAllFeatures(token));
     }
     System.out.println("EOS");
   }
