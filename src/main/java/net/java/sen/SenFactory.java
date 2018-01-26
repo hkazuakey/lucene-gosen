@@ -88,6 +88,7 @@ public class SenFactory {
    * @return
    */
   public synchronized static SenFactory getInstance(String dictionaryDir, String userDictionaryDir) {
+    // Only the main dictionary path can be a key
     String key = (dictionaryDir == null || dictionaryDir.trim().length() == 0) ? EMPTY_DICTIONARYDIR_KEY : dictionaryDir;
     SenFactory instance = map.get(key);
     if (instance == null) {
@@ -119,7 +120,7 @@ public class SenFactory {
 
     // Read user dictionary files
     GosenDictionaryHandler userDictionary = null;
-    if (userDictionaryDir != null) {
+    if (userDictionaryDir != null && !dictionaryDir.equals(userDictionaryDir)) {
       userDictionary = new GosenDictionaryHandler();
       loadDictionary(userDictionaryDir, userDictionary);
     }
@@ -160,8 +161,9 @@ public class SenFactory {
    * @return
    */
   private ByteBuffer concatByteBuffer(ByteBuffer a, ByteBuffer b) {
-    int size = a.array().length + b.array().length;
+    int size = a.capacity() + b.capacity();
     ByteBuffer results = ByteBuffer.allocate(size).put(a).put(b);
+    results.rewind();
     return results;
   }
 
@@ -329,6 +331,14 @@ public class SenFactory {
     return getStringTagger(dictionaryDir, null, tokenizeUnknownKatakana);
   }
 
+  /**
+   * Creates a StringTagger from the given configuration
+   *
+   * @param dictionaryDir           directory of a dictionary
+   * @param userDictionaryDir       directory or a user dictionary
+   * @param tokenizeUnknownKatakana
+   * @return
+   */
   public static StringTagger getStringTagger(String dictionaryDir, String userDictionaryDir, boolean tokenizeUnknownKatakana) {
     return new StringTagger(getTokenizer(dictionaryDir, userDictionaryDir, tokenizeUnknownKatakana));
   }

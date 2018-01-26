@@ -40,6 +40,7 @@ import net.java.sen.filter.StreamFilter;
  * memory and time
  * 
  */
+//TODO: Determine whether we should remove this tagger or not
 public class StreamTagger {
   
   /**

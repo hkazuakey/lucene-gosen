@@ -30,6 +30,8 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.Arrays;
 
+import static org.apache.lucene.analysis.TokenStream.DEFAULT_TOKEN_ATTRIBUTE_FACTORY;
+
 /**
  * Tests for {@link GosenTokenizer}
  */
@@ -47,6 +49,14 @@ public class TestGosenTokenizer extends BaseTokenStreamTestCase {
     @Override
     protected TokenStreamComponents createComponents(String field) {
       Tokenizer tokenizer = new GosenTokenizer(null, SenTestUtil.IPADIC_DIR, true);
+      return new TokenStreamComponents(tokenizer, tokenizer);
+    }
+  };
+
+  private Analyzer analyzer_with_usrdict = new Analyzer() {
+    @Override
+    protected TokenStreamComponents createComponents(String fieldName) {
+      Tokenizer tokenizer = new GosenTokenizer(DEFAULT_TOKEN_ATTRIBUTE_FACTORY, null, SenTestUtil.IPADIC_DIR, SenTestUtil.NAIST_CHASEN_DIC_DIR, false);
       return new TokenStreamComponents(tokenizer, tokenizer);
     }
   };
@@ -254,4 +264,25 @@ public class TestGosenTokenizer extends BaseTokenStreamTestCase {
     );
   }
 
+  /**
+   * Tests user dictionary feature
+   */
+
+  @Test
+  public void testUserDictWithSysDict() throws IOException {
+    assertAnalyzesTo(analyzer_with_usrdict, "魔女の宅配便",
+      new String[] { "魔女の宅配便" },
+      new int[] {0},
+      new int[] {6}
+    );
+  }
+
+  @Test
+  public void testUserDictionary1() throws IOException {
+    assertAnalyzesTo(analyzer_with_usrdict, "魔女の宅配便",
+      new String[] { "魔女の宅配便" },
+      new int[] {0},
+      new int[] {6}
+    );
+  }
 }

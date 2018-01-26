@@ -50,7 +50,8 @@ public class SenTestUtil {
    * IPADIC dictionary directory path
    */
   public static final String IPADIC_DIR = "./dictionary/ipadic/compiled-dictionaries/net/java/sen";
-  
+  public static final String NAIST_CHASEN_DIC_DIR = "./dictionary/naist-chasen/compiled-dictionaries/net/java/sen";
+
   /**
    * Returns a StringTagger for testing
    *
