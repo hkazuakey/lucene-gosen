@@ -55,6 +55,8 @@ public class SenFactory {
   private static final String DICT_TOKEN_FILE = "token.sen";
   private static final String DICT_TRIE_FILE = "trie.sen";
   private static final String DICT_POSINDEX_FILE = "posIndex.sen";
+  private static final String DICT_CHAR_CLASS_FILE = "charClass.sen";
+  private static final String DICT_DEFAULT_POS_FILE = "defaultPos.sen";
 
   private static final String unknownPOS = "未知語";
 

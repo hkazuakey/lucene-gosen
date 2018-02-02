@@ -21,21 +21,11 @@
 
 package net.java.sen.compiler;
 
-import java.io.BufferedOutputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.nio.MappedByteBuffer;
 import java.nio.ShortBuffer;
 import java.nio.channels.FileChannel;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 
 import net.java.sen.util.IOUtils;
 
@@ -89,7 +79,20 @@ public class DictionaryBuilder {
    * Compiled header data filename
    */
   private static final String HEADER_DATA_FILENAME = "header.sen";
-  
+
+  /**
+   * Compiled character class definition filename
+   */
+  private static final String CHAR_CLASS_FILENAME = "charClass.sen";
+
+  /**
+   * Compiled default PoS for BOS/EOS/UNKNOWN definition filename
+   */
+  private static final String DEFAULT_POS_FILENAME = "defaultPos.sen";
+
+  private static final String CHAR_CLASS_DEFINITION_FILENAME = "char.def";
+  private static final String DEFAULT_POS_DEFINITION_FILENAME = "defpos.def";
+
   /**
    * Default connection cost
    */
@@ -108,17 +111,17 @@ public class DictionaryBuilder {
   /**
    * Beginning-of-string token part-of-speech
    */
-  private static final String BOS_PART_OF_SPEECH = "文頭,*,*,*,*,*,*";
+  private static final String BOS_DEFAULT_PART_OF_SPEECH = "文頭,*,*,*,*,*,*";
   
   /**
    * End-of-string token part-of-speech
    */
-  private static final String EOS_PART_OF_SPEECH = "文末,*,*,*,*,*,*";
+  private static final String EOS_DEFAULT_PART_OF_SPEECH = "文末,*,*,*,*,*,*";
   
   /**
    * Unknown token part-of-speech
    */
-  private static final String UNKNOWN_PART_OF_SPEECH = "名詞,サ変接続,*,*,*,*,*";
+  private static final String UNKNOWN_DEFAULT_PART_OF_SPEECH = "名詞,サ変接続,*,*,*,*,*";
   
   /**
    * Precursor data for the Trie file
@@ -185,7 +188,35 @@ public class DictionaryBuilder {
     
     return splitFieldList;
   }
-  
+
+
+  private void loadDefinitionFiles() throws IOException {
+    HashMap<String, String> defaultValues = new HashMap<>();
+
+    FileInputStream fis = null;
+    BufferedReader breader = null;
+    try {
+      fis = new FileInputStream(CHAR_CLASS_DEFINITION_FILENAME);
+      breader = new BufferedReader(new InputStreamReader(fis));
+
+      defaultValues.clear();
+
+      String line;
+      while ((line = breader.readLine()) != null) {
+        if (line.length() == 0 || line.charAt(0) == '#') {
+          continue;
+        }
+        //
+//        if (line)
+      }
+    } catch (Exception e) {
+      //
+    } finally {
+      IOUtils.closeWhileHandlingException(breader);
+    }
+
+  }
+
   /**
    * Creates the part-of-speech data file
    * 
@@ -659,6 +690,8 @@ public class DictionaryBuilder {
     dictionaryCSVFilenames.addAll(Arrays.asList(customDictionaryCSVFilenames));
     
     String charset = "UTF-8";
+
+
     
     // Create connection cost file (matrix.sen)
     CostMatrixBuilder[] matrixBuilders = createConnectionCostFile(
@@ -683,9 +716,9 @@ public class DictionaryBuilder {
           PART_OF_SPEECH_START,
           PART_OF_SPEECH_SIZE,
           charset,
-          BOS_PART_OF_SPEECH,
-          EOS_PART_OF_SPEECH,
-          UNKNOWN_PART_OF_SPEECH,
+          BOS_DEFAULT_PART_OF_SPEECH,
+          EOS_DEFAULT_PART_OF_SPEECH,
+          UNKNOWN_DEFAULT_PART_OF_SPEECH,
           dictionaryList,
           standardCTokens
       );

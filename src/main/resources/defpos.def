@@ -1,0 +1,9 @@
+# Define default POS value for BOS/EOS and UNKNOWN tokens
+#
+# Accepted format is the following:
+#  <BOS/EOS/UNKNOWN> : "<POS>"
+#
+
+BOS: "文頭,*,*,*,*,*,*"
+EOS: "文末,*,*,*,*,*,*"
+UNKNOWN: "名詞,サ変接続,*,*,*,*,*"
