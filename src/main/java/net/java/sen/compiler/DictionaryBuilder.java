@@ -89,7 +89,20 @@ public class DictionaryBuilder {
    * Compiled header data filename
    */
   private static final String HEADER_DATA_FILENAME = "header.sen";
-  
+
+  /**
+   * Compiled character class definition filename
+   */
+  private static final String CHAR_CLASS_FILENAME = "charClass.sen";
+
+  /**
+   * Compiled default PoS for BOS/EOS/UNKNOWN definition filename
+   */
+  private static final String DEFAULT_POS_FILENAME = "defaultPos.sen";
+
+  private static final String CHAR_CLASS_DEFINITION_FILENAME = "char.def";
+  private static final String DEFAULT_POS_DEFINITION_FILENAME = "defpos.def";
+
   /**
    * Default connection cost
    */
@@ -185,7 +198,35 @@ public class DictionaryBuilder {
     
     return splitFieldList;
   }
-  
+
+
+  private void loadDefinitionFiles() throws IOException {
+    HashMap<String, String> defaultValues = new HashMap<>();
+
+    FileInputStream fis = null;
+    BufferedReader breader = null;
+    try {
+      fis = new FileInputStream(CHAR_CLASS_DEFINITION_FILENAME);
+      breader = new BufferedReader(new InputStreamReader(fis));
+
+      defaultValues.clear();
+
+      String line;
+      while ((line = breader.readLine()) != null) {
+        if (line.length() == 0 || line.charAt(0) == '#') {
+          continue;
+        }
+        //
+//        if (line)
+      }
+    } catch (Exception e) {
+      //
+    } finally {
+      IOUtils.closeWhileHandlingException(breader);
+    }
+
+  }
+
   /**
    * Creates the part-of-speech data file
    * 

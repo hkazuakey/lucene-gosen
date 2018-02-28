@@ -57,7 +57,7 @@ public class CommentFilterTest extends LuceneTestCase {
     };
     
     
-    StringTagger tagger = getStringTagger();
+    SenTagger tagger = getSenTagger();
     CommentFilter filter = new CommentFilter();
     filter.readRules (new BufferedReader (new StringReader ("< > 記号-注釈")));
     tagger.addFilter (filter);
@@ -82,7 +82,7 @@ public class CommentFilterTest extends LuceneTestCase {
     };
     
     
-    StringTagger tagger = getStringTagger();
+    SenTagger tagger = getSenTagger();
     CommentFilter filter = new CommentFilter();
     filter.readRules (new BufferedReader (new StringReader ("< > 記号-注釈")));
     tagger.addFilter (filter);
@@ -107,7 +107,7 @@ public class CommentFilterTest extends LuceneTestCase {
     };
     
     
-    StringTagger tagger = getStringTagger();
+    SenTagger tagger = getSenTagger();
     CommentFilter filter = new CommentFilter();
     filter.readRules (new BufferedReader (new StringReader ("< > 記号-注釈")));
     tagger.addFilter (filter);
@@ -133,7 +133,7 @@ public class CommentFilterTest extends LuceneTestCase {
     };
     
     
-    StringTagger tagger = getStringTagger();
+    SenTagger tagger = getSenTagger();
     CommentFilter filter = new CommentFilter();
     filter.readRules (new BufferedReader (new StringReader ("< > 記号-注釈")));
     tagger.addFilter (filter);
@@ -159,7 +159,7 @@ public class CommentFilterTest extends LuceneTestCase {
     };
     
     
-    StringTagger tagger = getStringTagger();
+    SenTagger tagger = getSenTagger();
     CommentFilter filter = new CommentFilter();
     filter.readRules (new BufferedReader (new StringReader ("< > 記号-注釈")));
     tagger.addFilter (filter);
@@ -186,7 +186,7 @@ public class CommentFilterTest extends LuceneTestCase {
     };
     
     
-    StringTagger tagger = getStringTagger();
+    SenTagger tagger = getSenTagger();
     CommentFilter filter = new CommentFilter();
     filter.readRules (new BufferedReader (new StringReader ("< > 記号-注釈")));
     tagger.addFilter (filter);
@@ -213,7 +213,7 @@ public class CommentFilterTest extends LuceneTestCase {
     };
     
     
-    StringTagger tagger = getStringTagger();
+    SenTagger tagger = getSenTagger();
     CommentFilter filter = new CommentFilter();
     filter.readRules (new BufferedReader (new StringReader ("《《 》》 記号-注釈")));
     tagger.addFilter (filter);

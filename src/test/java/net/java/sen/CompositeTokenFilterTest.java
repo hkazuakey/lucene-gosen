@@ -51,7 +51,7 @@ public class CompositeTokenFilterTest extends LuceneTestCase {
     };
     
     
-    StringTagger tagger = getStringTagger();
+    SenTagger tagger = getSenTagger();
     CompositeTokenFilter filter = new CompositeTokenFilter();
     filter.readRules (new BufferedReader (new StringReader ("名詞-数 名詞-数 名詞-数記号")));
     tagger.addFilter (filter);
@@ -78,7 +78,7 @@ public class CompositeTokenFilterTest extends LuceneTestCase {
     };
     
     
-    StringTagger tagger = getStringTagger();
+    SenTagger tagger = getSenTagger();
     CompositeTokenFilter filter = new CompositeTokenFilter();
     filter.readRules (new BufferedReader (new StringReader ("名詞-数 名詞-数 名詞-数記号")));
     tagger.addFilter (filter);
@@ -105,7 +105,7 @@ public class CompositeTokenFilterTest extends LuceneTestCase {
     };
     
     
-    StringTagger tagger = getStringTagger();
+    SenTagger tagger = getSenTagger();
     CompositeTokenFilter filter = new CompositeTokenFilter();
     filter.readRules (new BufferedReader (new StringReader ("名詞-数 名詞-数 名詞-数記号")));
     tagger.addFilter (filter);
@@ -129,7 +129,7 @@ public class CompositeTokenFilterTest extends LuceneTestCase {
     };
     
     
-    StringTagger tagger = getStringTagger();
+    SenTagger tagger = getSenTagger();
     CompositeTokenFilter filter = new CompositeTokenFilter();
     filter.readRules (new BufferedReader (new StringReader ("未知語 未知語")));
     tagger.addFilter (filter);

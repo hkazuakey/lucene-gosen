@@ -32,9 +32,9 @@ import net.java.sen.dictionary.Viterbi;
  */
 public class SenTestUtil {
   /**
-   * A StringTagger for testing
+   * A SenTagger for testing
    */
-  private static StringTagger stringTagger = null;
+  private static SenTagger senTagger = null;
   
   /**
    * A Viterbi for testing
@@ -52,18 +52,18 @@ public class SenTestUtil {
   public static final String IPADIC_DIR = "./dictionary/ipadic/compiled-dictionaries/net/java/sen";
   
   /**
-   * Returns a StringTagger for testing
+   * Returns a SenTagger for testing
    *
-   * @return The StringTagger
+   * @return The SenTagger
    */
-  static StringTagger getStringTagger() {
-    if (stringTagger == null) {
-      stringTagger = SenFactory.getStringTagger(IPADIC_DIR, false);
+  static SenTagger getSenTagger() {
+    if (senTagger == null) {
+      senTagger = SenFactory.getStringTagger(IPADIC_DIR, false);
     }
     
-    stringTagger.removeFilters();
+    senTagger.removeFilters();
     
-    return stringTagger;
+    return senTagger;
   }
   
   /**

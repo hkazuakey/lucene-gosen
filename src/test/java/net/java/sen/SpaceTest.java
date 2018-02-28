@@ -51,7 +51,7 @@ public class SpaceTest extends LuceneTestCase {
     };
     
     
-    StringTagger tagger = getStringTagger();
+    SenTagger tagger = getSenTagger();
     
     List<Token> tokens = tagger.analyze(testString);
     
@@ -74,7 +74,7 @@ public class SpaceTest extends LuceneTestCase {
         new Token ("だ", 7298, 8, 1, new Morpheme ("助動詞", "特殊・ダ", "基本形", "*", new String[]{"ダ"}, new String[]{"ダ"}, null))
     };
     
-    StringTagger tagger = getStringTagger();
+    SenTagger tagger = getSenTagger();
     
     List<Token> tokens = tagger.analyze(testString);
     
@@ -98,7 +98,7 @@ public class SpaceTest extends LuceneTestCase {
     };
     
     
-    StringTagger tagger = getStringTagger();
+    SenTagger tagger = getSenTagger();
     
     List<Token> tokens = tagger.analyze(testString);
     
@@ -122,7 +122,7 @@ public class SpaceTest extends LuceneTestCase {
     };
     
     
-    StringTagger tagger = getStringTagger();
+    SenTagger tagger = getSenTagger();
     
     List<Token> tokens = tagger.analyze(testString);
     
@@ -146,7 +146,7 @@ public class SpaceTest extends LuceneTestCase {
     };
     
     
-    StringTagger tagger = getStringTagger();
+    SenTagger tagger = getSenTagger();
     
     List<Token> tokens = tagger.analyze(testString);
     
@@ -170,7 +170,7 @@ public class SpaceTest extends LuceneTestCase {
     };
     
     
-    StringTagger tagger = getStringTagger();
+    SenTagger tagger = getSenTagger();
     
     List<Token> tokens = tagger.analyze(testString);
     
@@ -194,7 +194,7 @@ public class SpaceTest extends LuceneTestCase {
     };
     
     
-    StringTagger tagger = getStringTagger();
+    SenTagger tagger = getSenTagger();
     
     List<Token> tokens = tagger.analyze(testString);
     

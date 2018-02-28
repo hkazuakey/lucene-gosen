@@ -21,7 +21,6 @@
 
 package net.java.sen.dictionary;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;

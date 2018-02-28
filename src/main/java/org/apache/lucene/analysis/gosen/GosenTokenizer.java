@@ -20,7 +20,7 @@ package org.apache.lucene.analysis.gosen;
 import java.io.IOException;
 
 import net.java.sen.SenFactory;
-import net.java.sen.StringTagger;
+import net.java.sen.SenTagger;
 import net.java.sen.dictionary.Morpheme;
 import net.java.sen.dictionary.Token;
 import net.java.sen.filter.StreamFilter;
@@ -53,7 +53,7 @@ import org.apache.lucene.util.AttributeFactory;
  * </ul>
  */
 public final class GosenTokenizer extends Tokenizer {
-  private final StreamTagger2 tagger;
+  private final GosenTagger tagger;
 
   // Term attributes
   private final CharTermAttribute termAtt = addAttribute(CharTermAttribute.class);
@@ -96,11 +96,11 @@ public final class GosenTokenizer extends Tokenizer {
    */
   public GosenTokenizer(AttributeFactory factory, StreamFilter filter, String dictionaryDir, boolean tokenizeUnknownKatakana) {
     super(factory);
-    StringTagger stringTagger = SenFactory.getStringTagger(dictionaryDir, tokenizeUnknownKatakana);
+    SenTagger senTagger = SenFactory.getStringTagger(dictionaryDir, tokenizeUnknownKatakana);
     if (filter != null) {
-      stringTagger.addFilter(filter);
+      senTagger.addFilter(filter);
     }
-    tagger = new StreamTagger2(stringTagger, this.input);
+    tagger = new GosenTagger(senTagger, this.input);
   }
 
   @Override

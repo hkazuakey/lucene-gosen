@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import net.java.sen.StringTagger;
+import net.java.sen.SenTagger;
 import net.java.sen.dictionary.Token;
 
 /**
@@ -33,17 +33,24 @@ import net.java.sen.dictionary.Token;
  * (http://www.unicode.org/reports/tr29/)
  * <p>
  */
-public final class StreamTagger2 {
+public final class GosenTagger {
+
   private static final int IOBUFFER = 4096;
   private final char buffer[] = new char[IOBUFFER];
-  /** true length of text in the buffer */
-  private int length = 0; 
-  /** length in buffer that can be evaluated safely, up to a safe end point */
-  private int usableLength = 0; 
-  /** accumulated offset of previous buffers for this reader, for offsetAtt */
+  /**
+   * true length of text in the buffer
+   */
+  private int length = 0;
+  /**
+   * length in buffer that can be evaluated safely, up to a safe end point
+   */
+  private int usableLength = 0;
+  /**
+   * accumulated offset of previous buffers for this reader, for offsetAtt
+   */
   private int offset = 0;
-  
-  private StringTagger tagger;
+
+  private SenTagger tagger;
   private Reader input;
   private final BreakIterator breaker = BreakIterator.getSentenceInstance(Locale.JAPANESE); /* tokenizes a char[] of text */
   private final CharArrayIterator iterator = new CharArrayIterator();
@@ -51,9 +58,9 @@ public final class StreamTagger2 {
   private int index = 0;
 
   /**
-   * Construct a new StreamTagger2 that breaks text into words from the given Reader.
+   * Construct a new GosenTagger that breaks text into words from the given Reader.
    */
-  public StreamTagger2(StringTagger tagger, Reader input) {
+  public GosenTagger(SenTagger tagger, Reader input) {
     this.tagger = tagger;
     this.input = input;
   }
@@ -70,7 +77,7 @@ public final class StreamTagger2 {
     }
     return tokens.get(index++);
   }
-  
+
   public void reset() throws IOException {
     iterator.setText(buffer, 0, 0);
     breaker.setText(iterator);
@@ -82,31 +89,31 @@ public final class StreamTagger2 {
     this.input = input;
     reset();
   }
-  
+
   public int end() throws IOException {
     return (length < 0) ? offset : offset + length;
-  }  
+  }
 
   /*
-   * This tokenizes text based upon the longest matching rule, and because of 
+   * This tokenizes text based upon the longest matching rule, and because of
    * this, isn't friendly to a Reader.
-   * 
+   *
    * Text is read from the input stream in 4kB chunks. Within a 4kB chunk of
-   * text, the last unambiguous break point is found. Any remaining characters 
-   * represent possible partial sentences, so are appended to the front of the 
+   * text, the last unambiguous break point is found. Any remaining characters
+   * represent possible partial sentences, so are appended to the front of the
    * next chunk.
-   * 
+   *
    * There is the possibility that there are no unambiguous break points within
    * an entire 4kB chunk of text (binary data). So there is a maximum word limit
    * of 4kB since it will not try to grow the buffer in this case.
-   * 
+   *
    * Note: this is much more sophisticated than StreamTagger, which will just
    * truncate on its 256 char buffer!
    */
 
   /**
    * Returns the last unambiguous break position in the text.
-   * 
+   *
    * @return position of character, or -1 if one does not exist
    */
   private int findSafeEnd() {
@@ -115,9 +122,9 @@ public final class StreamTagger2 {
         return i + 1;
     return -1;
   }
-  
+
   private boolean isSafeEnd(char ch) {
-    switch(ch) {
+    switch (ch) {
       case 0x000D:
       case 0x000A:
       case 0x0085:
@@ -132,7 +139,7 @@ public final class StreamTagger2 {
   /**
    * Refill the buffer, accumulating the offset and setting usableLength to the
    * last unambiguous break position
-   * 
+   *
    * @throws IOException
    */
   private void refill() throws IOException {
@@ -148,24 +155,24 @@ public final class StreamTagger2 {
       usableLength = findSafeEnd();
       if (usableLength < 0)
         usableLength = length; /*
-                                * more than IOBUFFER of text without breaks,
-                                * gonna possibly truncate tokens
-                                */
+         * more than IOBUFFER of text without breaks,
+         * gonna possibly truncate tokens
+         */
     }
 
     iterator.setText(buffer, 0, Math.max(0, usableLength));
     breaker.setText(iterator);
   }
-  
+
 
   private static int read(Reader input, char[] buffer, int offset, int length) throws IOException {
     assert length >= 0 : "length must not be negative: " + length;
- 
+
     int remaining = length;
-    while ( remaining > 0 ) {
+    while (remaining > 0) {
       int location = length - remaining;
-      int count = input.read( buffer, offset + location, remaining );
-      if ( -1 == count ) { // EOF
+      int count = input.read(buffer, offset + location, remaining);
+      if (-1 == count) { // EOF
         break;
       }
       remaining -= count;
