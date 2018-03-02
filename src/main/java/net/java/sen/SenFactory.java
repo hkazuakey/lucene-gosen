@@ -60,18 +60,8 @@ public class SenFactory {
 
   private static final String unknownPOS = "未知語";
 
-  private final String[] posIndex, conjTypeIndex, conjFormIndex;
-  private final ByteBuffer costs, pos, tokens, trie;
-
-  private class GosenDictionaryHandler {
-    ByteBuffer costs;
-    ByteBuffer pos;
-    ByteBuffer tokens;
-    ByteBuffer trie;
-    String[] posIndex;
-    String[] conjTypeIndex;
-    String[] conjFormIndex;
-  }
+  private String[] posIndex, conjTypeIndex, conjFormIndex;
+  private ByteBuffer costs, pos, tokens, trie;
 
   /**
    * @param dictionaryDir a directory of dictionaries
@@ -85,16 +75,16 @@ public class SenFactory {
    * Get the singleton factory instance
    *
    * @param dictionaryDir
-   * @param userDictionaryDir
+   * @param userDictionaryName
    * @return
    */
-  public synchronized static SenFactory getInstance(String dictionaryDir, String userDictionaryDir) {
+  public synchronized static SenFactory getInstance(String dictionaryDir, String userDictionaryName) {
     // Only the main dictionary path can be a key
     String key = (dictionaryDir == null || dictionaryDir.trim().length() == 0) ? EMPTY_DICTIONARYDIR_KEY : dictionaryDir;
     SenFactory instance = map.get(key);
     if (instance == null) {
       try {
-        instance = new SenFactory(dictionaryDir, userDictionaryDir);
+        instance = new SenFactory(dictionaryDir, userDictionaryName);
         map.put(key, instance);
       } catch (IOException ex) {
         throw new RuntimeException(ex);
@@ -114,44 +104,13 @@ public class SenFactory {
     this(dictionaryDir, null);
   }
 
-  private SenFactory(String dictionaryDir, String userDictionaryDir) throws IOException {
+  private SenFactory(String dictionaryDir, String userDictionaryName) throws IOException {
     // Read main dictionary files
-    GosenDictionaryHandler mainDictionary = new GosenDictionaryHandler();
-    loadDictionary(dictionaryDir, mainDictionary);
+    loadDictionary(dictionaryDir);
 
     // Read user dictionary files
-    GosenDictionaryHandler userDictionary = null;
-    if (userDictionaryDir != null && !dictionaryDir.equals(userDictionaryDir)) {
-      userDictionary = new GosenDictionaryHandler();
-      loadDictionary(userDictionaryDir, userDictionary);
-    }
-
-    if (userDictionary == null) {
-      costs = mainDictionary.costs;
-      pos = mainDictionary.pos;
-      tokens = mainDictionary.tokens;
-      trie = mainDictionary.trie;
-      posIndex = mainDictionary.posIndex;
-      conjTypeIndex = mainDictionary.conjTypeIndex;
-      conjFormIndex = mainDictionary.conjFormIndex;
-    } else {
-      // Merge the main and user dictionary data
-      int size;
-      // costs
-      costs = concatByteBuffer(mainDictionary.costs, userDictionary.costs);
-      // pos
-      pos = concatByteBuffer(mainDictionary.pos, userDictionary.pos);
-      // tokens
-      tokens = concatByteBuffer(mainDictionary.tokens, userDictionary.tokens);
-      // trie
-      trie = concatByteBuffer(mainDictionary.trie, userDictionary.trie);
-
-      // posIndex
-      posIndex = concatStringArray(mainDictionary.posIndex, userDictionary.posIndex);
-      // conjTypeIndex
-      conjTypeIndex = concatStringArray(mainDictionary.conjTypeIndex, userDictionary.conjTypeIndex);
-      // conjFormIndex
-      conjFormIndex = concatStringArray(mainDictionary.conjFormIndex, userDictionary.conjFormIndex);
+    if (userDictionaryName != null && !dictionaryDir.equals(userDictionaryName)) {
+      loadCSVDictionary(userDictionaryName);
     }
   }
 
@@ -185,46 +144,50 @@ public class SenFactory {
   }
 
   /**
-   * @param dictPath
+   * @param path
    * @throws IOException
    */
-  private void loadDictionary(String dictPath, GosenDictionaryHandler handler) throws IOException {
+  private void loadDictionary(String path) throws IOException {
     InputStream in = null;
     DataInputStream din = null;
 
     // Read data files
     try {
-      in = getInputStream(DICT_HEADER_FILE, dictPath);
+      in = getInputStream(DICT_HEADER_FILE, path);
       din = new DataInputStream(in);
-      handler.costs = loadBuffer(DICT_CONNECTION_COST_FILE, din.readInt(), dictPath).asReadOnlyBuffer();
-      handler.pos = loadBuffer(DICT_POS_FILE, din.readInt(), dictPath).asReadOnlyBuffer();
-      handler.tokens = loadBuffer(DICT_TOKEN_FILE, din.readInt(), dictPath).asReadOnlyBuffer();
-      handler.trie = loadBuffer(DICT_TRIE_FILE, din.readInt(), dictPath).asReadOnlyBuffer();
+      costs = loadBuffer(DICT_CONNECTION_COST_FILE, din.readInt(), path).asReadOnlyBuffer();
+      pos = loadBuffer(DICT_POS_FILE, din.readInt(), path).asReadOnlyBuffer();
+      tokens = loadBuffer(DICT_TOKEN_FILE, din.readInt(), path).asReadOnlyBuffer();
+      trie = loadBuffer(DICT_TRIE_FILE, din.readInt(), path).asReadOnlyBuffer();
     } finally {
       IOUtils.closeWhileHandlingException(din, in);
     }
 
     // Read index files
     try {
-      in = getInputStream(DICT_POSINDEX_FILE, dictPath);
+      in = getInputStream(DICT_POSINDEX_FILE, path);
       din = new DataInputStream(in);
-      handler.posIndex = new String[din.readChar()];
-      for (int i = 0; i < handler.posIndex.length; i++) {
-        handler.posIndex[i] = din.readUTF();
+      posIndex = new String[din.readChar()];
+      for (int i = 0; i < posIndex.length; i++) {
+        posIndex[i] = din.readUTF();
       }
 
-      handler.conjTypeIndex = new String[din.readChar()];
-      for (int i = 0; i < handler.conjTypeIndex.length; i++) {
-        handler.conjTypeIndex[i] = din.readUTF();
+      conjTypeIndex = new String[din.readChar()];
+      for (int i = 0; i < conjTypeIndex.length; i++) {
+        conjTypeIndex[i] = din.readUTF();
       }
 
-      handler.conjFormIndex = new String[din.readChar()];
-      for (int i = 0; i < handler.conjFormIndex.length; i++) {
-        handler.conjFormIndex[i] = din.readUTF();
+      conjFormIndex = new String[din.readChar()];
+      for (int i = 0; i < conjFormIndex.length; i++) {
+        conjFormIndex[i] = din.readUTF();
       }
     } finally {
       IOUtils.closeWhileHandlingException(din, in);
     }
+  }
+
+  private void loadCSVDictionary(String path) {
+
   }
 
   /**
@@ -290,8 +253,8 @@ public class SenFactory {
     return getTokenizer(dictionaryDir, null, tokenizeUnknownKatakana);
   }
 
-  private static Tokenizer getTokenizer(String dictionaryDir, String userDictionaryDir, boolean tokenizeUnknownKatakana) {
-    SenFactory localInstance = SenFactory.getInstance(dictionaryDir, userDictionaryDir);
+  private static Tokenizer getTokenizer(String dictionaryDir, String userDictionaryName, boolean tokenizeUnknownKatakana) {
+    SenFactory localInstance = SenFactory.getInstance(dictionaryDir, userDictionaryName);
 
     return new JapaneseTokenizer(
         new Dictionary(
@@ -334,12 +297,12 @@ public class SenFactory {
    * Creates a SenTagger from the given configuration
    *
    * @param dictionaryDir           directory of a dictionary
-   * @param userDictionaryDir       directory or a user dictionary
+   * @param userDictionaryName       directory or a user dictionary
    * @param tokenizeUnknownKatakana
    * @return
    */
-  public static SenTagger getStringTagger(String dictionaryDir, String userDictionaryDir, boolean tokenizeUnknownKatakana) {
-    return new SenTagger(getTokenizer(dictionaryDir, userDictionaryDir, tokenizeUnknownKatakana));
+  public static SenTagger getStringTagger(String dictionaryDir, String userDictionaryName, boolean tokenizeUnknownKatakana) {
+    return new SenTagger(getTokenizer(dictionaryDir, userDictionaryName, tokenizeUnknownKatakana));
   }
 
   /**
