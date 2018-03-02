@@ -18,14 +18,9 @@
  * 
  */
 
-package net.java.sen.tokenizers.ja;
+package net.java.sen;
 
-import net.java.sen.dictionary.CToken;
-import net.java.sen.dictionary.Dictionary;
-import net.java.sen.dictionary.Morpheme;
-import net.java.sen.dictionary.Node;
-import net.java.sen.dictionary.SentenceIterator;
-import net.java.sen.dictionary.Tokenizer;
+import net.java.sen.dictionary.*;
 import net.java.sen.trie.CharIterator;
 
 import static java.lang.Character.UnicodeBlock.LATIN_1_SUPPLEMENT;
@@ -44,7 +39,7 @@ import static java.lang.Character.UnicodeBlock.CYRILLIC_SUPPLEMENTARY;
 /**
  * A Tokenizer for Japanese text
  */
-public class JapaneseTokenizer extends Tokenizer {
+public class SenTokenizer extends TokenizerBase {
   
   /** Character class for non-Japanese text */
   static final int OTHER = 0x80;
@@ -174,13 +169,13 @@ public class JapaneseTokenizer extends Tokenizer {
   }
   
   /**
-   * Creates a JapaneseTokenizer with the given Dictionary
+   * Creates a SenTokenizer with the given Dictionary
    * 
    * @param dictionary The Dictionary in which to search for possible morphemes
    * @param unknownPartOfSpeechDescription The part-of-speech code to use for unknown tokens
    * @param tokenizeUnknownKatakana Grouping unknown tokens to generate a token.
    */
-  public JapaneseTokenizer(Dictionary dictionary, String unknownPartOfSpeechDescription, boolean tokenizeUnknownKatakana) {
+  public SenTokenizer(Dictionary dictionary, String unknownPartOfSpeechDescription, boolean tokenizeUnknownKatakana) {
     super(dictionary, unknownPartOfSpeechDescription, tokenizeUnknownKatakana);
   }
 }

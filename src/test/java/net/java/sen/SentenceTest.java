@@ -29,7 +29,6 @@ import net.java.sen.dictionary.Reading;
 import net.java.sen.dictionary.Sentence;
 import net.java.sen.dictionary.SentenceIterator;
 import net.java.sen.dictionary.Token;
-import net.java.sen.dictionary.Viterbi;
 
 import org.apache.lucene.util.LuceneTestCase;
 import org.junit.Test;

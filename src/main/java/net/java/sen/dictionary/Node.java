@@ -21,10 +21,12 @@
 
 package net.java.sen.dictionary;
 
+import net.java.sen.Viterbi;
+
 /**
  * A node within the {@link Viterbi} cost lattice
  */
-final public class Node implements Cloneable {
+public final class Node implements Cloneable {
   
   /** Used in Viterbi path cost calculation */
   public short rcAttr2;

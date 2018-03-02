@@ -19,6 +19,7 @@
 
 package net.java.sen;
 
+import java.io.IOException;
 import java.util.List;
 
 import net.java.sen.dictionary.Reading;
@@ -36,7 +37,7 @@ public class ReadingProcessorTest extends LuceneTestCase {
    * Test simple reading analysis
    */
   @Test
-  public void testBasicAnalysis() {
+  public void testBasicAnalysis() throws IOException {
     String testString = "皆様、只今より映画を上映いたします";
     
     Reading[] expectedReadings = new Reading[] {
@@ -59,7 +60,7 @@ public class ReadingProcessorTest extends LuceneTestCase {
    * Test analysis of a compound token
    */
   @Test
-  public void testCompoundAnalysis() {
+  public void testCompoundAnalysis() throws IOException {
     String testString = "空を飛び越える";
     
     Reading[] expectedReadings = new Reading[] {
@@ -81,7 +82,7 @@ public class ReadingProcessorTest extends LuceneTestCase {
    * Test analysis of kanji tokens with constraints
    */
   @Test
-  public void testKanjiConstraint() {
+  public void testKanjiConstraint() throws IOException {
     String testString = "昨日";
     
     Reading[] expectedReadings = new Reading[] {
@@ -105,7 +106,7 @@ public class ReadingProcessorTest extends LuceneTestCase {
    * Test analysis of constraints on kanji tokens that have alternatives
    */
   @Test
-  public void testKanjiAlternativesConstraint() {
+  public void testKanjiAlternativesConstraint() throws IOException {
     String testString = "今日は";
     
     Reading[] expectedReadings = new Reading[] {
@@ -126,7 +127,7 @@ public class ReadingProcessorTest extends LuceneTestCase {
    * Test analysis of constraints on kana
    */
   @Test
-  public void testKanaConstraint() {
+  public void testKanaConstraint() throws IOException {
     String testString = "こんにちは";
     
     Reading[] expectedReadings = new Reading[] {
@@ -147,7 +148,7 @@ public class ReadingProcessorTest extends LuceneTestCase {
    * Test analysis of constraints on romaji
    */
   @Test
-  public void testRomajiConstraint() {
+  public void testRomajiConstraint() throws IOException {
     String testString = "Good day";
     
     Reading[] expectedReadings = new Reading[] {
@@ -168,7 +169,7 @@ public class ReadingProcessorTest extends LuceneTestCase {
    * Test Alternative matching constraint on compound token
    */
   @Test
-  public void testAlternativeCompoundConstraint() {
+  public void testAlternativeCompoundConstraint() throws IOException {
     String testString = "駆け出し";
     
     Reading[] expectedReadings = new Reading[] {
@@ -190,7 +191,7 @@ public class ReadingProcessorTest extends LuceneTestCase {
    * Test Fallback on non-matching reading on compound
    */
   @Test
-  public void testCompoundFallback() {
+  public void testCompoundFallback() throws IOException {
     String testString = "駆け出し";
     
     Reading[] expectedReadings = new Reading[] {
@@ -211,7 +212,7 @@ public class ReadingProcessorTest extends LuceneTestCase {
    * Test constraint causing a blank kanji reading
    */
   @Test
-  public void testBlankKanjiReading() {
+  public void testBlankKanjiReading() throws IOException {
     String testString = "あたらしい構築";
     
     Reading[] expectedReadings = new Reading[] {
@@ -232,7 +233,7 @@ public class ReadingProcessorTest extends LuceneTestCase {
    * Test non-override constraint on a kana morpheme - should not cause reading 
    */
   @Test
-  public void testConstrainedKanaReading() {
+  public void testConstrainedKanaReading() throws IOException {
     String testString = "ある";
     
     Reading[] expectedReadings = new Reading[] {};
@@ -251,7 +252,7 @@ public class ReadingProcessorTest extends LuceneTestCase {
    * Test override constraint on a kana token - should cause reading 
    */
   @Test
-  public void testConstrainedKanaReading2() {
+  public void testConstrainedKanaReading2() throws IOException {
     String testString = "ある";
     
     Reading[] expectedReadings = new Reading[] {
@@ -272,7 +273,7 @@ public class ReadingProcessorTest extends LuceneTestCase {
    * Test non-override constraint on a katakana token - should not cause reading 
    */
   @Test
-  public void testConstrainedKanaReading3() {
+  public void testConstrainedKanaReading3() throws IOException {
     String testString = "アル";
     
     Reading[] expectedReadings = new Reading[] {};
@@ -291,7 +292,7 @@ public class ReadingProcessorTest extends LuceneTestCase {
    * Tests a blank constraint on a kanji token 
    */
   @Test
-  public void testBlankConstraintKanji() {
+  public void testBlankConstraintKanji() throws IOException {
     String testString = "見当";
     
     Reading[] expectedReadings = new Reading[] {};

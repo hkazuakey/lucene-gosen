@@ -39,6 +39,7 @@ import org.apache.lucene.analysis.util.ResourceLoaderAware;
  *     &lt;tokenizer class="solr.GosenTokenizerFactory"
  *       compositePOS="compositePOS.txt"
  *       dictionaryDir="/opt/dictionary"
+ *       userDictionaryName="/opt/user_dictionary"
  *       tokenizeUnknownKatakana="false / true" /&gt;
  *   &lt;/analyzer&gt;
  * &lt;/fieldType&gt;</pre>
@@ -47,9 +48,11 @@ public class GosenTokenizerFactory extends TokenizerFactory implements ResourceL
   
   private CompositeTokenFilter compositeTokenFilter;
   private String dictionaryDir;
+  private String userDictionaryName;
 
   private final String compositePosFile;
   private final String dirVal;
+  private final String usrDictName;
   private final boolean tokenizeUnknownKatakana;
 
   /**
@@ -59,9 +62,10 @@ public class GosenTokenizerFactory extends TokenizerFactory implements ResourceL
   public GosenTokenizerFactory(Map<String,String> args) {
     super(args);
 
-    compositePosFile = get(args, "compositePOS");
-    dirVal = get(args, "dictionaryDir");
-    tokenizeUnknownKatakana = getBoolean(args, "tokenizeUnknownKatakana", false);
+    this.compositePosFile = get(args, "compositePOS");
+    this.dirVal = get(args, "dictionaryDir");
+    this.usrDictName = get(args, "userDictionaryName");
+    this.tokenizeUnknownKatakana = getBoolean(args, "tokenizeUnknownKatakana", false);
 
     if (!args.isEmpty()){
       throw new IllegalArgumentException("Unknown parameters: " + args);
@@ -94,10 +98,18 @@ public class GosenTokenizerFactory extends TokenizerFactory implements ResourceL
       // absolute path or relative path
       dictionaryDir = dirVal;
     }
+    if (usrDictName != null) {
+      // Set filename of the user dictionary.
+      userDictionaryName = usrDictName;
+    }
   }
 
   @Override
   public GosenTokenizer create(AttributeFactory factory) {
-    return new GosenTokenizer(factory, compositeTokenFilter, dictionaryDir, tokenizeUnknownKatakana);
+    return new GosenTokenizer(factory,
+                                compositeTokenFilter,
+                                dictionaryDir,
+                                userDictionaryName,
+                                tokenizeUnknownKatakana);
   }
 }

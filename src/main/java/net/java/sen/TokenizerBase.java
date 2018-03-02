@@ -19,17 +19,22 @@
  * 
  */
 
-package net.java.sen.dictionary;
+package net.java.sen;
+
+import net.java.sen.dictionary.*;
 
 import java.io.IOException;
 
 /**
- * A String Tokenizer
+ * Base class for a String Tokenizer
+ *
+ * Originally, this class is called 'Tokenizer' but its name has been changed to clearly distinct from
+ * Lucene's Tokenizer class.
  * 
- * <p> The Tokenizer uses a {@link Dictionary} to assist the decomposition of
+ * <p> The TokenizerBase uses a {@link Dictionary} to assist the decomposition of
  * strings into potential morphemes
  */
-public abstract class Tokenizer {
+public abstract class TokenizerBase {
   
   /**
    * The {@link Dictionary}  used to find possible morphemes
@@ -60,6 +65,37 @@ public abstract class Tokenizer {
    * The flag value that enables Gosen to determine whether concatenating consecutive Unknown Katakana tokens or not
    */
   protected final boolean tokenizeUnknownKatakana;
+
+  private final Morpheme unknownMorpheme;
+  
+  //-------------------------------------------------------------------------------------------------------------------
+
+  /**
+   * Constructs a new {@link TokenizerBase} that uses the specified
+   * {@link Dictionary} to find possible morphemes within a given string
+   *
+   * @param dictionary The {@link Dictionary} to search within
+   * @param unknownPartOfSpeechDescription The part-of-speech code to use for
+   *        unknown tokens
+   * @param tokenizeUnknownKatakana Grouping unknown tokens as one token
+   */
+  public TokenizerBase(Dictionary dictionary, String unknownPartOfSpeechDescription, boolean tokenizeUnknownKatakana) {
+    this.dictionary = dictionary;
+    this.unknownPartOfSpeechDescription = unknownPartOfSpeechDescription;
+
+    this.bosNode = new Node();
+    this.bosNode.setCToken(this.dictionary.getBOSToken());
+
+    this.eosNode = new Node();
+    this.eosNode.setCToken(this.dictionary.getEOSToken());
+
+    this.unknownCToken = this.dictionary.getUnknownToken();
+    this.unknownCToken.cost = 30000;
+
+    this.unknownMorpheme = new Morpheme(unknownPartOfSpeechDescription, null, null, "*", new String[0], new String[0], null);
+
+    this.tokenizeUnknownKatakana = tokenizeUnknownKatakana;
+  }
 
   /**
    * @return Returns the flag value
@@ -121,9 +157,7 @@ public abstract class Tokenizer {
     
     return unknownNode;
   }
-  
-  private final Morpheme unknownMorpheme;
-  
+
   /**
    * Searches for possible morphemes from the given SentenceIterator. The
    * {@link Node} that is returned links through
@@ -137,31 +171,4 @@ public abstract class Tokenizer {
    * @throws IOException
    */
   public abstract Node lookup(SentenceIterator iterator, char[] surface) throws IOException;
-  
-  /**
-   * Constructs a new {@link Tokenizer} that uses the specified
-   * {@link Dictionary} to find possible morphemes within a given string
-   * 
-   * @param dictionary The {@link Dictionary} to search within
-   * @param unknownPartOfSpeechDescription The part-of-speech code to use for
-   *        unknown tokens
-   * @param tokenizeUnknownKatakana Grouping unknown tokens as one token
-   */
-  public Tokenizer(Dictionary dictionary, String unknownPartOfSpeechDescription, boolean tokenizeUnknownKatakana) {
-    this.dictionary = dictionary;
-    this.unknownPartOfSpeechDescription = unknownPartOfSpeechDescription;
-    
-    this.bosNode = new Node();
-    this.bosNode.setCToken(this.dictionary.getBOSToken());
-    
-    this.eosNode = new Node();
-    this.eosNode.setCToken(this.dictionary.getEOSToken());
-    
-    this.unknownCToken = this.dictionary.getUnknownToken();
-    this.unknownCToken.cost = 30000;
-    
-    this.unknownMorpheme = new Morpheme(unknownPartOfSpeechDescription, null, null, "*", new String[0], new String[0], null);
-
-    this.tokenizeUnknownKatakana = tokenizeUnknownKatakana;
-  }
 }

@@ -19,51 +19,54 @@
 
 package net.java.sen;
 
+import java.io.IOException;
 import java.util.List;
 
 import junit.framework.Assert;
 
+import net.java.sen.dictionary.Dictionary;
+import net.java.sen.dictionary.IPADictionary;
 import net.java.sen.dictionary.Reading;
 import net.java.sen.dictionary.Token;
-import net.java.sen.dictionary.Viterbi;
 
 /**
  * Test utilities
  */
 public class SenTestUtil {
   /**
-   * A StringTagger for testing
+   * A SenTagger for testing
    */
-  private static StringTagger stringTagger = null;
-  
+  private static SenTagger senTagger = null;
+
   /**
    * A Viterbi for testing
    */
   private static Viterbi viterbi = null;
-  
+
   /**
    * A Reading Processor for testing
    */
   private static ReadingProcessor readingProcessor = null;
-  
+
   /**
    * IPADIC dictionary directory path
    */
   public static final String IPADIC_DIR = "./dictionary/ipadic/compiled-dictionaries/net/java/sen";
-  
+
   /**
-   * Returns a StringTagger for testing
+   * Returns a SenTagger for testing
    *
-   * @return The StringTagger
+   * @return The SenTagger
    */
-  static StringTagger getStringTagger() {
-    if (stringTagger == null) {
-      stringTagger = SenFactory.getStringTagger(IPADIC_DIR, false);
+  static SenTagger getSenTagger() throws IOException {
+    if (senTagger == null) {
+      Dictionary dictionary = new IPADictionary(IPADIC_DIR);
+      senTagger = new SenTagger(new SenTokenizer(dictionary, null, false));
     }
     
-    stringTagger.removeFilters();
+    senTagger.removeFilters();
     
-    return stringTagger;
+    return senTagger;
   }
   
   /**
@@ -71,9 +74,10 @@ public class SenTestUtil {
    *
    * @return The Viterbi
    */
-  static Viterbi getViterbi() {
+  static Viterbi getViterbi() throws IOException {
     if (viterbi == null) {
-      viterbi = SenFactory.getViterbi(IPADIC_DIR, false);
+      Dictionary dictionary = new IPADictionary(IPADIC_DIR);
+      viterbi = new Viterbi(new SenTokenizer(dictionary, null, false));
     }
     
     return viterbi;
@@ -84,9 +88,10 @@ public class SenTestUtil {
    *
    * @return The Reading Processor
    */
-  static ReadingProcessor getReadingProcessor() {
+  static ReadingProcessor getReadingProcessor() throws IOException {
     if (readingProcessor == null) {
-      readingProcessor = SenFactory.getReadingProcessor(IPADIC_DIR, false);
+      Dictionary dictionary = new IPADictionary(IPADIC_DIR);
+      readingProcessor = new ReadingProcessor(new SenTokenizer(dictionary, null, false));
     }
     
     readingProcessor.clearFilters();

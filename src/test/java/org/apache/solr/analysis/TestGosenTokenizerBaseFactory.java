@@ -26,7 +26,7 @@ import org.apache.lucene.analysis.util.ResourceLoader;
 import org.apache.lucene.util.LuceneTestCase;
 import org.junit.Test;
 
-public class TestGosenTokenizerFactory extends LuceneTestCase {
+public class TestGosenTokenizerBaseFactory extends LuceneTestCase {
   
   private File baseDir;
   private File dicDir;

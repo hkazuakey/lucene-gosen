@@ -19,6 +19,7 @@
 
 package net.java.sen;
 
+import java.io.IOException;
 import java.util.List;
 
 import net.java.sen.dictionary.Reading;
@@ -38,7 +39,7 @@ public class OverrideFilterTest extends LuceneTestCase {
 	 * Tests override of default visibility
 	 */
 	@Test
-	public void testHide() {
+	public void testHide() throws IOException {
 		String testString = "３週間寒さが続いた";
 
 		Reading[] expectedReadings = new Reading[] {
@@ -64,7 +65,7 @@ public class OverrideFilterTest extends LuceneTestCase {
 	 * Tests override of default skipping of number kanji
 	 */
 	@Test
-	public void testNumbers() {
+	public void testNumbers() throws IOException {
 		String testString = "一億三千";
 
 		Reading[] expectedReadings = new Reading[] {

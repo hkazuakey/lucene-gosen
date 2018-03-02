@@ -33,8 +33,6 @@ import java.util.regex.Pattern;
 import net.java.sen.dictionary.Reading;
 import net.java.sen.dictionary.Sentence;
 import net.java.sen.dictionary.Token;
-import net.java.sen.dictionary.Tokenizer;
-import net.java.sen.dictionary.Viterbi;
 import net.java.sen.filter.ReadingFilter;
 import net.java.sen.filter.ReadingNode;
 import net.java.sen.util.TextUtil;
@@ -605,9 +603,9 @@ public class ReadingProcessor {
   }
   
   /**
-   * @param tokenizer The Tokenizer to use
+   * @param tokenizerBase The TokenizerBase to use
    */
-  public ReadingProcessor(Tokenizer tokenizer) {
-    this.viterbi = new Viterbi(tokenizer);
+  public ReadingProcessor(TokenizerBase tokenizerBase) {
+    this.viterbi = new Viterbi(tokenizerBase);
   }
 }

@@ -19,6 +19,7 @@
 
 package net.java.sen;
 
+import java.io.IOException;
 import java.util.List;
 
 import net.java.sen.dictionary.Reading;
@@ -38,7 +39,7 @@ public class NumberFilterTest extends LuceneTestCase {
    * Tests default skipping of number kanji
    */
   @Test
-  public void testNumbers() {
+  public void testNumbers() throws IOException {
     String testString = "一二三四五六七八九十百千万億兆";
     
     Reading[] expectedReadings = new Reading[] {
@@ -60,7 +61,7 @@ public class NumberFilterTest extends LuceneTestCase {
    * Tests correct reading behaviour of "ヵ月"
    */
   @Test
-  public void testKagetsu() {
+  public void testKagetsu() throws IOException {
     String[] testStrings = new String[] {
         "一ヵ月",
         "一ヶ月",
@@ -89,7 +90,7 @@ public class NumberFilterTest extends LuceneTestCase {
    * Tests correct reading behaviour of "分" -> "ふん"
    */
   @Test
-  public void testFun() {
+  public void testFun() throws IOException {
     String[] testStrings = new String[] {
         "二分ほど",
         "五分ほど",
@@ -117,7 +118,7 @@ public class NumberFilterTest extends LuceneTestCase {
    * Tests correct reading behaviour of "分" -> "ふん" for "億"
    */
   @Test
-  public void testFunOku() {
+  public void testFunOku() throws IOException {
     String testString = "億分ほど";
     
     Reading[] expectedReadings = new Reading[] {
@@ -138,7 +139,7 @@ public class NumberFilterTest extends LuceneTestCase {
    * Tests correct reading behaviour of "分" -> "ふん" for "兆"
    */
   @Test
-  public void testFunChou() {
+  public void testFunChou() throws IOException {
     String testString = "兆分ほど";
     
     Reading[] expectedReadings = new Reading[] {
@@ -159,7 +160,7 @@ public class NumberFilterTest extends LuceneTestCase {
    * Tests correct reading behaviour of "分" -> "ぷん"
    */
   @Test
-  public void testPun() {
+  public void testPun() throws IOException {
     String[] testStrings = new String[] {
         "一分ほど",
         "三分ほど",

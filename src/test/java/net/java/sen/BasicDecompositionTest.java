@@ -22,6 +22,8 @@ package net.java.sen;
 import java.io.IOException;
 import java.util.List;
 
+import net.java.sen.dictionary.Dictionary;
+import net.java.sen.dictionary.IPADictionary;
 import net.java.sen.dictionary.Morpheme;
 import net.java.sen.dictionary.Token;
 
@@ -34,10 +36,16 @@ import static net.java.sen.SenTestUtil.*;
  * Tests basic string analysis
  */
 public class BasicDecompositionTest extends LuceneTestCase {
+
+  public SenTagger createTagger(String path) throws IOException {
+    Dictionary ipaDictionary = new IPADictionary(path);
+    return new SenTagger(new SenTokenizer(ipaDictionary, null, false));
+  }
+
   /**
    * Tests string decomposition
    *
-   * @throws IOException if there is some error in StringTagger.analyze()
+   * @throws IOException if there is some error in SenTagger.analyze()
    */
   @Test
   public void testBlankDecomposition() throws IOException {
@@ -45,7 +53,7 @@ public class BasicDecompositionTest extends LuceneTestCase {
     
     Token[] testTokens = new Token[] {};
     
-    StringTagger tagger = getStringTagger();
+    SenTagger tagger = getSenTagger();
     
     List<Token> tokens = tagger.analyze(testString);
     
@@ -55,7 +63,7 @@ public class BasicDecompositionTest extends LuceneTestCase {
   /**
    * Tests string decomposition
    * 
-   * @throws IOException if there is some error in StringTagger.analyze()
+   * @throws IOException if there is some error in SenTagger.analyze()
    */
   @Test
   public void testDecomposition1() throws IOException {
@@ -116,7 +124,7 @@ public class BasicDecompositionTest extends LuceneTestCase {
         new Token ("。", 88146, 78, 1, new Morpheme ("記号-句点", "*", "*", "*", new String[]{"。"}, new String[]{"。"}, null))
     };
     
-    StringTagger tagger = getStringTagger();
+    SenTagger tagger = getSenTagger();
     
     List<Token> tokens = tagger.analyze(testString);
     
@@ -126,7 +134,7 @@ public class BasicDecompositionTest extends LuceneTestCase {
   /**
    * Tests string decomposition
    * 
-   * @throws IOException if there is some error in StringTagger.analyze()
+   * @throws IOException if there is some error in SenTagger.analyze()
    */
   @Test
   public void testDecomposition2() throws IOException {
@@ -147,7 +155,7 @@ public class BasicDecompositionTest extends LuceneTestCase {
     };
     
     
-    StringTagger tagger = getStringTagger();
+    SenTagger tagger = getSenTagger();
     
     List<Token> tokens = tagger.analyze(testString);
     
@@ -157,7 +165,7 @@ public class BasicDecompositionTest extends LuceneTestCase {
   /**
    * Tests string decomposition
    * 
-   * @throws IOException if there is some error in StringTagger.analyze()
+   * @throws IOException if there is some error in SenTagger.analyze()
    */
   @Test
   public void testDecomposition3() throws IOException {
@@ -174,7 +182,7 @@ public class BasicDecompositionTest extends LuceneTestCase {
     };
     
     
-    StringTagger tagger = getStringTagger();
+    SenTagger tagger = getSenTagger();
     
     List<Token> tokens = tagger.analyze(testString);
     
@@ -184,7 +192,7 @@ public class BasicDecompositionTest extends LuceneTestCase {
   /**
    * Tests string decomposition
    * 
-   * @throws IOException if there is some error in StringTagger.analyze()
+   * @throws IOException if there is some error in SenTagger.analyze()
    */
   @Test
   public void testDecomposition4() throws IOException {
@@ -200,7 +208,7 @@ public class BasicDecompositionTest extends LuceneTestCase {
     };
     
     
-    StringTagger tagger = getStringTagger();
+    SenTagger tagger = getSenTagger();
     
     List<Token> tokens = tagger.analyze(testString);
     
@@ -210,7 +218,7 @@ public class BasicDecompositionTest extends LuceneTestCase {
   /**
    * Tests string decomposition
    * 
-   * @throws IOException if there is some error in StringTagger.analyze()
+   * @throws IOException if there is some error in SenTagger.analyze()
    */
   @Test
   public void testDifferentDictionary01() throws IOException {
@@ -236,8 +244,8 @@ public class BasicDecompositionTest extends LuceneTestCase {
         new Token ("ない", 7090, 6, 2, new Morpheme ("助動詞", "特殊・ナイ", "基本形", "*", new String[]{"ナイ"}, new String[]{"ナイ"}, null))
     };
 
-    StringTagger ipadicTagger = SenFactory.getStringTagger(SenTestUtil.IPADIC_DIR, false);
-    StringTagger naistChasenTagger = SenFactory.getStringTagger(naistChasenDir, false);
+    SenTagger ipadicTagger = createTagger(SenTestUtil.IPADIC_DIR);
+    SenTagger naistChasenTagger = createTagger(naistChasenDir);
 
     assertNotSame(ipadicTagger, naistChasenTagger);
 
@@ -251,13 +259,13 @@ public class BasicDecompositionTest extends LuceneTestCase {
   /**
    * Tests same SenFactory instance.
    *
-   * @throws IOException if there is some error in StringTagger.analyze()
+   * @throws IOException if there is some error in SenTagger.analyze()
    */
   @Test
   public void testSenFactoryInstance01() throws IOException {
 
-    SenFactory instance = SenFactory.getInstance(IPADIC_DIR);
-    SenFactory instance2 = SenFactory.getInstance(IPADIC_DIR);
+    SenTagger instance = createTagger(SenTestUtil.IPADIC_DIR);
+    SenTagger instance2 = createTagger(SenTestUtil.IPADIC_DIR);
 
     assertSame(instance, instance2);
   }
@@ -270,7 +278,7 @@ public class BasicDecompositionTest extends LuceneTestCase {
    */
   @Test
   public void testLatinAccentedCharacter() throws IOException {
-    StringTagger tagger = SenFactory.getStringTagger(SenTestUtil.IPADIC_DIR, false);
+    SenTagger tagger = createTagger(SenTestUtil.IPADIC_DIR);
 
     String strTest = "mündlichen";
 
@@ -289,7 +297,7 @@ public class BasicDecompositionTest extends LuceneTestCase {
    */
   @Test
   public void testKatakanaString() throws IOException {
-    StringTagger tagger = SenFactory.getStringTagger(SenTestUtil.IPADIC_DIR, false);
+    SenTagger tagger = createTagger(SenTestUtil.IPADIC_DIR);
 
     String strTest = "ッﾊﾞサ";
 

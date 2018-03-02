@@ -115,9 +115,9 @@ public class Morpheme {
     int length;
     
     if (loaded == LoadState.NONE) {
-      partOfSpeech = dictionary.posIndex[DictionaryUtil.readVInt(buffer)];
-      conjugationalType = dictionary.conjTypeIndex[DictionaryUtil.readVInt(buffer)];
-      conjugationalForm = dictionary.conjFormIndex[DictionaryUtil.readVInt(buffer)];
+      partOfSpeech = dictionary.getPosIndex(DictionaryUtil.readVInt(buffer));
+      conjugationalType = dictionary.getConjTypeIndex(DictionaryUtil.readVInt(buffer));
+      conjugationalForm = dictionary.getConjFormIndex(DictionaryUtil.readVInt(buffer));
       
       length = DictionaryUtil.readVInt(buffer);
       if (length == 0) {

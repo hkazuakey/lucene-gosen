@@ -61,7 +61,7 @@ public class CompoundWordFilterTest extends LuceneTestCase {
     };
     
     
-    StringTagger tagger = getStringTagger();
+    SenTagger tagger = getSenTagger();
     CompoundWordFilter filter = new CompoundWordFilter (tempCompoundFile.getAbsolutePath());
     tagger.addFilter(filter);
     
@@ -95,7 +95,7 @@ public class CompoundWordFilterTest extends LuceneTestCase {
     };
     
     
-    StringTagger tagger = getStringTagger();
+    SenTagger tagger = getSenTagger();
     CompoundWordFilter filter = new CompoundWordFilter (tempCompoundFile.getAbsolutePath());
     tagger.addFilter(filter);
     

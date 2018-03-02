@@ -4,7 +4,7 @@
 
   <dictionary-version>1.0</dictionary-version>
 
-  <tokenizer>net.java.sen.tokenizers.ja.JapaneseTokenizer</tokenizer>
+  <tokenizerBase>net.java.sen.SenTokenizer</tokenizerBase>
 
   <unknown-pos>未知語</unknown-pos>
 

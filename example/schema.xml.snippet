@@ -17,9 +17,9 @@
     -->
     <fieldType name="text_ja_gosen" class="solr.TextField" positionIncrementGap="100" autoGeneratePhraseQueries="false">
       <analyzer>
-        <!-- map characters before the tokenizer:
+        <!-- map characters before the tokenizerBase:
              Optionally, instead of the GosenWidthFactory, you can choose to do the width
-             mappings before the text is sent to the tokenizer.
+             mappings before the text is sent to the tokenizerBase.
         <charFilter class="solr.MappingCharFilterFactory" mapping="lang/mapping-japanese.txt"/>
         -->
         <!-- ICU4J based character normalizer GosenCharacterNormalizeFilter:
@@ -30,21 +30,21 @@
         <charFilter class="solr.GosenCharacterNormalizeFilterFactory" name="nfkc" mode="compose"/>
         -->
 
-        <!-- morphological tokenizer: sets the SURFACE form as the token, but also sets these attributes:
+        <!-- morphological tokenizerBase: sets the SURFACE form as the token, but also sets these attributes:
              BasicFormAttribute, ConjugationAttribute, PartOfSpeechAttribute, PronunciationsAttribute,
              ReadingsAttribute, and SentenceStartAttribute.
              Option setting
              compositePOS : merge multiple similar tokens by a part-of-speech based configurations.
-             dictionaryDir : specified a dictionary directory. you can use multiple dictionary for each tokenizer.
+             dictionaryDir : specified a dictionary directory. you can use multiple dictionary for each tokenizerBase.
              tokenizeUnknownKatakana : if set to true, not concatenate consecutive Unknown Katakana tokens.
         -->
-        <tokenizer class="solr.GosenTokenizerFactory" compositePOS="compositePOS.txt" dictionaryDir="dictionary/naist-chasen"/>
+        <tokenizerBase class="solr.GosenTokenizerFactory" compositePOS="compositePOS.txt" dictionaryDir="dictionary/naist-chasen"/>
 
         <!-- normalizes CJK width differences:
              1. Folds fullwidth ASCII variants into the equivalent basic latin
              2. Folds halfwidth Katakana variants into the equivalent kana
 
-             Note: alternatively you can use a MappingCharFilter before the tokenizer for this, but please note
+             Note: alternatively you can use a MappingCharFilter before the tokenizerBase for this, but please note
              that mapping characters can change how Sen tokenizes text.
         -->
         <filter class="solr.GosenWidthFilterFactory"/>

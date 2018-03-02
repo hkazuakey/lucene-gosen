@@ -19,7 +19,9 @@
  * 
  */
 
-package net.java.sen.dictionary;
+package net.java.sen;
+
+import net.java.sen.dictionary.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,9 +39,9 @@ import java.util.List;
 public class Viterbi {
   
   /**
-   * The Tokenizer used to decompose the sentence into prospective morphemes
+   * The TokenizerBase used to decompose the sentence into prospective morphemes
    */
-  private final Tokenizer tokenizer;
+  private final TokenizerBase tokenizerBase;
   
   /**
    * The beginning-of-string Node
@@ -70,7 +72,7 @@ public class Viterbi {
       Node bestNode = null;
       
       for (Node lNode = endNodeList[position]; lNode != null; lNode = lNode.lnext) {
-        int cost = lNode.cost + tokenizer.getDictionary().getCost(lNode.prev, lNode, rNode);
+        int cost = lNode.cost + tokenizerBase.getDictionary().getCost(lNode.prev, lNode, rNode);
         if (cost <= bestCost) {
           bestNode = lNode;
           bestCost = cost;
@@ -104,7 +106,7 @@ public class Viterbi {
         Node rNode2 = lookup(it, sentence.getCharacters(), sentence.getReadingConstraint(pos2));
         for (; rNode2 != null; rNode2 = rNode2.rnext) {
           rNode2 = rNode2.clone();
-          rNode2.cost = rNode.cost + tokenizer.getDictionary().getCost(rNode.prev, rNode, rNode2);
+          rNode2.cost = rNode.cost + tokenizerBase.getDictionary().getCost(rNode.prev, rNode, rNode2);
           rNode2.prev = rNode;
           
           int y = pos2 + rNode2.span;
@@ -130,7 +132,7 @@ public class Viterbi {
    * @throws IOException
    */
   private Node lookup(SentenceIterator iterator, char[] surface, Reading constraint) throws IOException {
-    Node resultNode = tokenizer.lookup(iterator, surface);
+    Node resultNode = tokenizerBase.lookup(iterator, surface);
     
     if (constraint == null) {
       return resultNode;
@@ -155,8 +157,8 @@ public class Viterbi {
     }
     
     // Synthesize Node
-    Node unknownNode = tokenizer.getUnknownNode(surface, iterator.origin(), constraint.length, constraint.length + iterator.skippedCharCount());
-    Morpheme unknownMorpheme = new Morpheme(unknownNode.morpheme.getPartOfSpeech(), null, null, "*", 
+    Node unknownNode = tokenizerBase.getUnknownNode(surface, iterator.origin(), constraint.length, constraint.length + iterator.skippedCharCount());
+    Morpheme unknownMorpheme = new Morpheme(unknownNode.morpheme.getPartOfSpeech(), null, null, "*",
         new String[] { constraint.text }, new String[0], unknownNode.morpheme.getAdditionalInformation());
     unknownNode.morpheme = unknownMorpheme;
     return unknownNode;
@@ -172,7 +174,7 @@ public class Viterbi {
    * @throws IOException
    */
   public List<Token> getPossibleTokens(Sentence sentence, int position) throws IOException {
-    Node resultNode = tokenizer.lookup(sentence.unconstrainedIterator(position), sentence.getCharacters());
+    Node resultNode = tokenizerBase.lookup(sentence.unconstrainedIterator(position), sentence.getCharacters());
     
     String sentenceString = new String(sentence.getCharacters());
     List<Token> tokenList = new ArrayList<Token>();
@@ -198,8 +200,8 @@ public class Viterbi {
     char[] surface = sentence.getCharacters();
     
     // Initialize the Viterbi lattice
-    bosNode = tokenizer.getBOSNode();
-    eosNode = tokenizer.getEOSNode();
+    bosNode = tokenizerBase.getBOSNode();
+    eosNode = tokenizerBase.getEOSNode();
     endNodeList = new Node[length + 1];
     endNodeList[0] = bosNode;
     endNodeList[length] = null;
@@ -258,11 +260,11 @@ public class Viterbi {
   }
   
   /**
-   * Creates a Viterbi instance using the given Tokenizer
+   * Creates a Viterbi instance using the given TokenizerBase
    * 
-   * @param tokenizer The Tokenizer to use
+   * @param tokenizerBase The TokenizerBase to use
    */
-  public Viterbi(Tokenizer tokenizer) {
-    this.tokenizer = tokenizer;
+  public Viterbi(TokenizerBase tokenizerBase) {
+    this.tokenizerBase = tokenizerBase;
   }
 }

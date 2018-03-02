@@ -34,7 +34,7 @@ import java.util.Arrays;
  * Tests for {@link GosenTokenizer}
  */
 @LuceneTestCase.Slow
-public class TestGosenTokenizer extends BaseTokenStreamTestCase {
+public class TestGosenTokenizerBase extends BaseTokenStreamTestCase {
   private Analyzer analyzer = new Analyzer() {
     @Override
     protected TokenStreamComponents createComponents(String field) {
