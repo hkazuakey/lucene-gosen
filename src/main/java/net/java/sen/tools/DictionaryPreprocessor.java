@@ -19,6 +19,7 @@
 
 package net.java.sen.tools;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -38,6 +39,9 @@ public class DictionaryPreprocessor {
    * @throws IOException 
    */
   public static void main(String[] args) throws FileNotFoundException, IOException {
+
+    final String CHASEN_CONNECT_FILE = "connect.cha";
+
     if (args.length != 3) {
       System.out.println("Syntax: java DictionaryPreprocessor <input charset> <dictionary directory> <output directory>");
       System.exit(1);
@@ -46,7 +50,13 @@ public class DictionaryPreprocessor {
     String inputCharset = args[0];
     String inputDirectory = args[1];
     String outputDirectory = args[2];
-    
-    new IpadicPreprocessor(inputCharset, inputDirectory).build(outputDirectory);
+
+    File f = new File(inputDirectory + "/" + CHASEN_CONNECT_FILE);
+    if (f.exists() && !f.isDirectory()) {
+      new IpadicPreprocessor(inputCharset, inputDirectory).build(outputDirectory);
+    } else {
+      // Skip pre-processing for IPA dictionary
+      System.out.println("There's no ChaSen related files appeared. Switch to MeCab-IPA-Dictionary mode.");
+    }
   }
 }
