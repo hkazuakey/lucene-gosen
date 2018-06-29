@@ -113,6 +113,25 @@ class CostMatrixBuilder {
           results.set(k++, i);
         }
       }
+      if (parent && k <= 0) {
+        // For supporting the latest IPA dictionary
+        int maxMatched = 0, matchedRule = 0;
+        for (int n = 0; n < results.size(); n++) {
+          int isMatched = 0;
+          int i = results.get(n);
+          for (int x = 0; x < csv.length; x++) {
+            ruleString = ruleList.get(i)[x];
+            if (ruleString.equals(csv[x])) {
+              isMatched++;
+              if (isMatched > maxMatched) {
+                maxMatched = isMatched;
+                matchedRule = i;
+              }
+            }
+          }
+        }
+        results.set(k++, matchedRule);
+      }
       results.setSize(k);
     }
 

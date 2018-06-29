@@ -660,7 +660,7 @@ public class DictionaryBuilder {
     
     String charset = "UTF-8";
     
-    // Create connection cost file (matrix.sen)
+    // Create connection cost file (connectionCost.sen)
     CostMatrixBuilder[] matrixBuilders = createConnectionCostFile(
         CONNECTION_CSV_FILENAME,
         CONNECTION_COST_DATA_FILENAME,
@@ -668,7 +668,7 @@ public class DictionaryBuilder {
         charset
     );
     
-    // Create part-of-speech data file (posInfo.sen)
+    // Create part-of-speech data file (partOfSpeech.sen and posIndex.sen)
     VirtualTupleList dictionaryList = null;
 
     try {
@@ -697,7 +697,7 @@ public class DictionaryBuilder {
           dictionaryList
       );
 
-      // Create Trie file (da.sen)
+      // Create Trie file (trie.sen)
       createTrieFile(TRIE_DATA_FILENAME, trieData);
       createHeaderFile(HEADER_DATA_FILENAME);
     } finally {
