@@ -10,9 +10,9 @@
 
 There are three types of jar files:
 
-* lucene-gosen-<version>.jar : Only java library, not include dictionary.
-* lucene-gosen-<version>-ipadic.jar : Java library with IPA dictionary.
-* lucene-gosen-<version>-naist-chasen.jar : Java library with Naist Chasen dictionary
+* lucene-gosen-\<version>.jar : Only java library, not include dictionary.
+* lucene-gosen-\<version>-ipadic.jar : Java library with IPA dictionary.
+* lucene-gosen-\<version>-naist-chasen.jar : Java library with Naist Chasen dictionary
 
 ## Installation With Apache Solr 10.x:
 
