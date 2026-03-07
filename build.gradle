@@ -1,9 +1,6 @@
 repositories {
   mavenLocal()
   mavenCentral()
-  maven {
-    url "http://maven.restlet.com"
-  }
 }
 group 'com.github.lucene-gosen'
 description 'Japanese analysis for Apache Lucene/Solr'
@@ -13,21 +10,25 @@ apply plugin: 'idea'
 
 version = luceneVersion
 
-dependencies {
-  compile "org.apache.lucene:lucene-core:${luceneVersion}"
-  compile "org.apache.lucene:lucene-analyzers-common:${luceneVersion}"
-  compile "org.apache.lucene:lucene-codecs:${luceneVersion}"
-  compile "com.ibm.icu:icu4j:${icu4jVersion}"
-  compile "org.restlet.jee:org.restlet:${restletVersion}"
-  compile "org.restlet.jee:org.restlet.ext.servlet:${restletVersion}"
-
-  testCompile "junit:junit:${junitVersion}"
-  testCompile "org.apache.lucene:lucene-test-framework:${luceneVersion}"
-  testCompile "com.carrotsearch.randomizedtesting:randomizedtesting-runner:${randomizedrunnerVersion}"
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(25)
+  }
 }
 
-jar {
-  version version
+tasks.withType(JavaCompile).configureEach {
+  options.encoding = 'UTF-8'
+}
+
+dependencies {
+  implementation "org.apache.lucene:lucene-core:${luceneVersion}"
+  implementation "org.apache.lucene:lucene-analysis-common:${luceneVersion}"
+  implementation "org.apache.lucene:lucene-codecs:${luceneVersion}"
+  implementation "com.ibm.icu:icu4j:${icu4jVersion}"
+
+  testImplementation "junit:junit:${junitVersion}"
+  testImplementation "org.apache.lucene:lucene-test-framework:${luceneVersion}"
+  testImplementation "com.carrotsearch.randomizedtesting:randomizedtesting-runner:${randomizedrunnerVersion}"
 }
 
 javadoc {
@@ -55,7 +56,7 @@ tasks.rebuildIpadicDic.dependsOn(compileJava, ":dictionary:cleanCompiledIpadic",
 
 // Create Jar library without dictionary
 task jarWithNaistChasen(type: Jar) {
-  classifier naistDictype
+  archiveClassifier = naistDictype
   from files(sourceSets.main.output,
           fileTree("dictionary" + File.separator
             + naistDictype + File.separator + compiledDicDir).include('**/*.sen')
@@ -65,7 +66,7 @@ task jarWithNaistChasen(type: Jar) {
 tasks.jarWithNaistChasen.dependsOn(compileJava, ":dictionary:compileNaistChasen")
 
 task jarWithIpadic(type: Jar) {
-  classifier ipadicDictype
+  archiveClassifier = ipadicDictype
   from files(sourceSets.main.output,
           fileTree("dictionary" + File.separator
                   + ipadicDictype + File.separator + compiledDicDir).include('**/*.sen')
@@ -75,12 +76,12 @@ task jarWithIpadic(type: Jar) {
 tasks.jarWithIpadic.dependsOn(compileJava, ":dictionary:compileIpadic")
 
 task javadocJar(type: Jar) {
-  classifier 'javadoc'
+  archiveClassifier = 'javadoc'
   from javadoc
 }
 
 task sourcesJar(type: Jar) {
-  classifier 'sources'
+  archiveClassifier = 'sources'
   from sourceSets.main.allSource
 }
 

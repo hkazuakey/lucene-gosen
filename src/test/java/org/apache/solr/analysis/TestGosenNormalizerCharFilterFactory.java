@@ -3,9 +3,9 @@
  */
 package org.apache.solr.analysis;
 
-import org.apache.lucene.analysis.MockTokenizer;
+import org.apache.lucene.tests.analysis.MockTokenizer;
 import org.apache.lucene.analysis.Tokenizer;
-import org.apache.lucene.util.LuceneTestCase;
+import org.apache.lucene.tests.util.LuceneTestCase;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -14,7 +14,7 @@ import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.apache.lucene.analysis.BaseTokenStreamTestCase.assertTokenStreamContents;
+import static org.apache.lucene.tests.analysis.BaseTokenStreamTestCase.assertTokenStreamContents;
 
 
 public class TestGosenNormalizerCharFilterFactory extends LuceneTestCase {
@@ -24,7 +24,7 @@ public class TestGosenNormalizerCharFilterFactory extends LuceneTestCase {
 
     StringReader tmpInput = new StringReader(input);
     Reader reader = factory.create(tmpInput);
-    Tokenizer tokenizer = new MockTokenizer(MockTokenizer.KEYWORD, false);
+    Tokenizer tokenizer = new MockTokenizer(MockTokenizer.KEYWORD, false, Integer.MAX_VALUE);
     tokenizer.setReader(reader);
 
     assertTokenStreamContents(tokenizer, new String[]{expected});

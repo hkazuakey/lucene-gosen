@@ -19,11 +19,14 @@ package org.apache.lucene.analysis.gosen;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.lucene.analysis.CharArraySet;
 import org.apache.lucene.analysis.StopwordAnalyzerBase;
+import org.apache.lucene.analysis.WordlistLoader;
+import org.apache.lucene.util.IOUtils;
 import org.apache.lucene.analysis.core.LowerCaseFilter;
 import org.apache.lucene.analysis.core.StopFilter;
 import org.apache.lucene.analysis.TokenStream;
@@ -59,8 +62,8 @@ public class GosenAnalyzer extends StopwordAnalyzerBase {
 
     static {
       try {
-        DEFAULT_STOP_SET = loadStopwordSet(false, GosenAnalyzer.class, "stopwords_ja.txt", "#");
-        final CharArraySet tagset = loadStopwordSet(false, GosenAnalyzer.class, "stoptags_ja.txt", "#");
+        DEFAULT_STOP_SET = WordlistLoader.getWordSet(IOUtils.getDecodingReader(GosenAnalyzer.class.getResourceAsStream("stopwords_ja.txt"), StandardCharsets.UTF_8), "#");
+        final CharArraySet tagset = WordlistLoader.getWordSet(IOUtils.getDecodingReader(GosenAnalyzer.class.getResourceAsStream("stoptags_ja.txt"), StandardCharsets.UTF_8), "#");
         DEFAULT_STOP_TAGS = new HashSet<String>();
         for (Object element : tagset) {
           char chars[] = (char[]) element;

@@ -1,6 +1,15 @@
+import org.gradle.process.ExecOperations
+import javax.inject.Inject
+
 plugins {
-    id "de.undercouch.download" version "3.1.2"
+    id "de.undercouch.download" version "5.6.0"
 }
+
+abstract class ExecHelper {
+    @Inject abstract ExecOperations getExecOperations()
+}
+
+ext.execHelper = objects.newInstance(ExecHelper)
 
 Properties naistProps = new Properties()
 Properties ipadicProps = new Properties()
@@ -22,14 +31,14 @@ def static replaceAllProperties(props) {
     }
 }
 
-def download(dictype, props) {
+def downloadDictionary(dictype, props) {
     String archiveFileName = props.getProperty("dic.archive")
     if (checkExistFile(dictype, archiveFileName)) {
         println "Already archive file[" + archiveFileName + "] exists. skip donwload"
     } else {
         // prepare directories
         project.mkdir(dictype)
-        download {
+        download.run {
             src props.getProperty("dic.home")+"/"+archiveFileName
             dest project.file(dictype)
         }
@@ -43,13 +52,13 @@ def checkExistFile(dictype, fileName) {
 
 task downloadNaistChasen(dependsOn: checkBuildStatus) {
     doLast {
-        download(naistDictype, naistProps)
+        downloadDictionary(naistDictype, naistProps)
     }
 }
 
 task downloadIpadic(dependsOn: checkBuildStatus) {
     doLast {
-        download("ipadic", ipadicProps)
+        downloadDictionary("ipadic", ipadicProps)
     }
 }
 
@@ -121,9 +130,9 @@ def preprocessDic(dictype, props) {
             && checkExistFile(getCompiledDicDir("."), "connection.csv")) {
         println "Already preprocessed. skip preprocessing"
     } else {
-        javaexec {
-            main 'net.java.sen.tools.DictionaryPreprocessor'
-            classpath sourceSets.main.runtimeClasspath
+        execHelper.execOperations.javaexec {
+            mainClass = 'net.java.sen.tools.DictionaryPreprocessor'
+            classpath rootProject.sourceSets.main.runtimeClasspath
             workingDir project.file(dictype)
             args "EUC-JP", dicDir, getCompiledDicDir(".")
         }
@@ -157,9 +166,9 @@ def compileDic(dictype, props) {
         checkExistFile(getCompiledDicDir(dictype), "header.sen")) {
         println "Already compiled. skip compile"
     } else {
-        javaexec {
-            main 'net.java.sen.tools.DictionaryCompiler'
-            classpath sourceSets.main.runtimeClasspath
+        execHelper.execOperations.javaexec {
+            mainClass = 'net.java.sen.tools.DictionaryCompiler'
+            classpath rootProject.sourceSets.main.runtimeClasspath
             workingDir project.file(getCompiledDicDir(dictype))
             if (hasProperty("customDics")) {
                 args getProperty("customDics")

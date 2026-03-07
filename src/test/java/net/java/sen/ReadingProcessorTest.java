@@ -23,7 +23,7 @@ import java.util.List;
 
 import net.java.sen.dictionary.Reading;
 
-import org.apache.lucene.util.LuceneTestCase;
+import org.apache.lucene.tests.util.LuceneTestCase;
 import org.junit.Test;
 
 import static net.java.sen.SenTestUtil.*;

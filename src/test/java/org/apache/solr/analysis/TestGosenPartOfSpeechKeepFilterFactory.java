@@ -18,10 +18,9 @@
 package org.apache.solr.analysis;
 
 import net.java.sen.SenTestUtil;
-import org.apache.lucene.analysis.BaseTokenStreamTestCase;
+import org.apache.lucene.tests.analysis.BaseTokenStreamTestCase;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.Tokenizer;
-import org.apache.lucene.util.Version;
 import org.junit.Test;
 
 import java.io.File;
@@ -61,7 +60,6 @@ public class TestGosenPartOfSpeechKeepFilterFactory extends BaseTokenStreamTestC
     Tokenizer tokenizer = tokenizerFactory.create();
     tokenizer.setReader(new StringReader("私は制限スピードを超える。"));
     Map<String,String> args = new HashMap<String,String>();
-    args.put("luceneMatchVersion", Version.LATEST.toString());
     args.put("tags", "stoptags.txt");
     GosenPartOfSpeechKeepFilterFactory factory = new GosenPartOfSpeechKeepFilterFactory(args);
     factory.inform(new StringMockResourceLoader(tags));

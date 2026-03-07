@@ -20,11 +20,11 @@ package org.apache.lucene.analysis.gosen;
 import net.java.sen.SenTestUtil;
 import net.java.sen.util.IOUtils;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.BaseTokenStreamTestCase;
+import org.apache.lucene.tests.analysis.BaseTokenStreamTestCase;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.Tokenizer;
-import org.apache.lucene.util.LuceneTestCase;
-import org.apache.lucene.util.TestUtil;
+import org.apache.lucene.tests.util.LuceneTestCase;
+import org.apache.lucene.tests.util.TestUtil;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -33,7 +33,6 @@ import java.util.Arrays;
 /**
  * Tests for {@link GosenTokenizer}
  */
-@LuceneTestCase.Slow
 public class TestGosenTokenizer extends BaseTokenStreamTestCase {
   private Analyzer analyzer = new Analyzer() {
     @Override

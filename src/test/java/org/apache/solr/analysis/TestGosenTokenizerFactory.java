@@ -22,8 +22,8 @@ import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.HashMap;
 
-import org.apache.lucene.analysis.util.ResourceLoader;
-import org.apache.lucene.util.LuceneTestCase;
+import org.apache.lucene.util.ResourceLoader;
+import org.apache.lucene.tests.util.LuceneTestCase;
 import org.junit.Test;
 
 public class TestGosenTokenizerFactory extends LuceneTestCase {

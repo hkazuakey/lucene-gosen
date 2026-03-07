@@ -1,5 +1,34 @@
 lucene-gosen Change Log
 
+========== 10.4.0 / 2026-03-07 ===================================
+
+Important Notice
+
+* Requires Java 11 or later (tested with JDK 25).
+* Requires Apache Lucene / Solr 10.x.
+
+New Features & Improvements
+
+* Migrated to Apache Lucene/Solr 10.4.0.
+* Migrated build to Gradle 9.4.0 with Java Toolchain API (JDK 25).
+* Updated dictionary download URLs to JAIST FTP mirror (OSDN is offline).
+
+API Changes
+
+* Factory classes updated for Lucene 10 API: package moves from
+  org.apache.lucene.analysis.util.* to org.apache.lucene.analysis.*,
+  and ResourceLoader/ResourceLoaderAware moved to org.apache.lucene.util.*.
+* Removed dependency on deprecated Version/luceneMatchVersion.
+* Replaced removed StopwordAnalyzerBase.loadStopwordSet() with
+  WordlistLoader/IOUtils equivalents.
+* Removed unused RollingCharBuffer from GosenNormalizerCharFilter.
+
+Others
+
+* Upgraded de.undercouch.download Gradle plugin to 5.6.0.
+* Replaced deprecated Project.javaexec() with injected ExecOperations
+  (required by Gradle 9).
+
 ========== 7.4.0 / 2018-06-29 ===================================
 
 Important Notice
