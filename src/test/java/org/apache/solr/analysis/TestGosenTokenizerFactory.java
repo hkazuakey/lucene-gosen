@@ -18,19 +18,23 @@
 package org.apache.solr.analysis;
 
 import java.io.File;
+import java.io.StringReader;
 import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.HashMap;
 
+import net.java.sen.SenTestUtil;
+import org.apache.lucene.analysis.gosen.GosenTokenizer;
+import org.apache.lucene.util.AttributeFactory;
 import org.apache.lucene.util.ResourceLoader;
 import org.apache.lucene.tests.util.LuceneTestCase;
 import org.junit.Test;
 
 public class TestGosenTokenizerFactory extends LuceneTestCase {
-  
+
   private File baseDir;
   private File dicDir;
-  
+
   @Override
   public void setUp() throws Exception {
     super.setUp();
@@ -40,7 +44,7 @@ public class TestGosenTokenizerFactory extends LuceneTestCase {
     dicDir = new File(baseDir, "custom-dic");
     dicDir.mkdir();
   }
-  
+
   @Override
   public void tearDown() throws Exception {
     dicDir.delete();
@@ -59,27 +63,25 @@ public class TestGosenTokenizerFactory extends LuceneTestCase {
     Field field = GosenTokenizerFactory.class.getDeclaredField("dictionaryDir");
     field.setAccessible(true);
     assertNull("dictionaryDir must be null.", field.get(factory));
-    
+
     // relative path (from conf dir)
     args.put("dictionaryDir", dicDir.getName());
     factory = new GosenTokenizerFactory(args);
     factory.inform(loader);
     assertEquals("dictionaryDir is incorrect.", dicDir.getName(), field.get(factory));
-    
+
     // absolute path
     args.put("dictionaryDir", dicDir.getAbsolutePath());
     factory = new GosenTokenizerFactory(args);
     factory.inform(loader);
     assertEquals("dictionaryDir is incorrect.", dicDir.getAbsolutePath(), field.get(factory));
-    
+
     // not exists path
     String notExistsPath = dicDir.getAbsolutePath() + "/hogehoge";
     args.put("dictionaryDir", notExistsPath);
     factory = new GosenTokenizerFactory(args);
     factory.inform(loader);
     assertEquals("dictionaryDir is incorrect.", notExistsPath, field.get(factory));
-    
-    
   }
 
   @Test
@@ -92,5 +94,31 @@ public class TestGosenTokenizerFactory extends LuceneTestCase {
     } catch (IllegalArgumentException expected) {
       assertTrue(expected.getMessage().contains("Unknown parameters"));
     }
+  }
+
+  @Test
+  public void testCreate() throws Exception {
+    Map<String, String> args = new HashMap<>();
+    args.put("dictionaryDir", SenTestUtil.IPADIC_DIR);
+    GosenTokenizerFactory factory = new GosenTokenizerFactory(args);
+    factory.inform(new StringMockResourceLoader(""));
+    GosenTokenizer tokenizer = factory.create(AttributeFactory.DEFAULT_ATTRIBUTE_FACTORY);
+    assertNotNull(tokenizer);
+    tokenizer.setReader(new StringReader("学生"));
+    tokenizer.reset();
+    assertTrue(tokenizer.incrementToken());
+    tokenizer.close();
+  }
+
+  @Test
+  public void testTokenizeUnknownKatakana() throws Exception {
+    Map<String, String> args = new HashMap<>();
+    args.put("dictionaryDir", SenTestUtil.IPADIC_DIR);
+    args.put("tokenizeUnknownKatakana", "true");
+    GosenTokenizerFactory factory = new GosenTokenizerFactory(args);
+    factory.inform(new StringMockResourceLoader(""));
+    GosenTokenizer tokenizer = factory.create(AttributeFactory.DEFAULT_ATTRIBUTE_FACTORY);
+    assertNotNull(tokenizer);
+    tokenizer.close();
   }
 }

@@ -6,6 +6,7 @@ group 'com.github.lucene-gosen'
 description 'Japanese analysis for Apache Lucene/Solr'
 
 apply plugin: 'java'
+apply plugin: 'jacoco'
 apply plugin: 'idea'
 
 version = luceneVersion
@@ -33,6 +34,39 @@ dependencies {
 
 javadoc {
   options.locale = 'en_US'
+}
+
+jacocoTestReport {
+  reports {
+    xml.required = true
+    html.required = true
+  }
+  afterEvaluate {
+    classDirectories.setFrom(files(classDirectories.files.collect {
+      fileTree(dir: it, exclude: [
+        'net/java/sen/compiler/**',
+        'net/java/sen/tools/**',
+      ])
+    }))
+  }
+}
+
+jacocoTestCoverageVerification {
+  afterEvaluate {
+    classDirectories.setFrom(files(classDirectories.files.collect {
+      fileTree(dir: it, exclude: [
+        'net/java/sen/compiler/**',
+        'net/java/sen/tools/**',
+      ])
+    }))
+  }
+  violationRules {
+    rule {
+      limit {
+        minimum = 0.90
+      }
+    }
+  }
 }
 defaultTasks 'clean', 'dist'
 

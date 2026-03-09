@@ -17,10 +17,17 @@
 
 package org.apache.solr.analysis;
 
+import net.java.sen.SenTestUtil;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.Tokenizer;
+import org.apache.lucene.analysis.gosen.GosenTokenizer;
 import org.apache.lucene.tests.util.LuceneTestCase;
 import org.junit.Test;
 
+import java.io.StringReader;
 import java.util.HashMap;
+
+import static org.apache.lucene.tests.analysis.BaseTokenStreamTestCase.assertTokenStreamContents;
 
 public class TestGosenWidthFilterFactory extends LuceneTestCase {
 
@@ -34,5 +41,15 @@ public class TestGosenWidthFilterFactory extends LuceneTestCase {
     } catch (IllegalArgumentException expected) {
       assertTrue(expected.getMessage().contains("Unknown parameters"));
     }
+  }
+
+  @Test
+  public void testCreate() throws Exception {
+    GosenWidthFilterFactory factory = new GosenWidthFilterFactory(new HashMap<>());
+    Tokenizer tokenizer = new GosenTokenizer(null, SenTestUtil.IPADIC_DIR, false);
+    tokenizer.setReader(new StringReader("Ａ"));
+    TokenStream stream = factory.create(tokenizer);
+    assertNotNull(stream);
+    assertTokenStreamContents(stream, new String[]{"A"});
   }
 }
