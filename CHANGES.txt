@@ -1,16 +1,16 @@
 lucene-gosen Change Log
 
-========== 10.4.0 / 2026-03-07 ===================================
+========== 10.4.0 / 2026-05-07 ===================================
 
 Important Notice
 
-* Requires Java 11 or later (tested with JDK 25).
+* Requires Java 21 or later (tested with JDK 21).
 * Requires Apache Lucene / Solr 10.x.
 
 New Features & Improvements
 
 * Migrated to Apache Lucene/Solr 10.4.0.
-* Migrated build to Gradle 9.4.0 with Java Toolchain API (JDK 25).
+* Migrated build to Gradle 9.4.0 with Java Toolchain API (JDK 21).
 * Updated dictionary download URLs to JAIST FTP mirror (OSDN is offline).
 
 API Changes
@@ -368,7 +368,7 @@ Others
 Important Notice
 
 * http://code.google.com/p/lucene-gosen/issues/detail?id=39
-  Change Lucene/Solr 4.2.0 library 
+  Change Lucene/Solr 4.2.0 library
 
 New Features & Improvements
 
@@ -385,7 +385,7 @@ Others
 Important Notice
 
 * http://code.google.com/p/lucene-gosen/issues/detail?id=38
-  Change Lucene/Solr 4.1.0 library 
+  Change Lucene/Solr 4.1.0 library
 
 New Features & Improvements
 
@@ -402,7 +402,7 @@ Others
 Important Notice
 
 * http://code.google.com/p/lucene-gosen/issues/detail?id=37
-  Change Lucene/Solr 4.0.0 library 
+  Change Lucene/Solr 4.0.0 library
 
 New Features & Improvements
 
@@ -429,7 +429,7 @@ Javadoc Fixes
 Others
 
 * http://code.google.com/p/lucene-gosen/issues/detail?id=29
-  Improve resource management, and refactor to import class 
+  Improve resource management, and refactor to import class
   Thanks haruyama (johtani)
 
 ========== 2.0.1 / 2012-05-09 ===================================
@@ -479,12 +479,12 @@ Others
 
 Important Notice
 
-* The serious bug fix is included. 
+* The serious bug fix is included.
 
 Bug Fixes
 
 * http://code.google.com/p/lucene-gosen/issues/detail?id=19
-  Memory usage increases by a specific character string. 
+  Memory usage increases by a specific character string.
   (johtani)
 
 ========== 1.2.0 / 2011-10-31 ===================================
@@ -574,5 +574,3 @@ API Changes
 Javadoc Fixes
 
 Others
-
-
