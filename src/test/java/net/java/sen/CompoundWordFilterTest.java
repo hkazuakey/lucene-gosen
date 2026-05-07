@@ -33,7 +33,7 @@ import net.java.sen.dictionary.Token;
 import net.java.sen.filter.stream.CompoundWordFilter;
 import net.java.sen.tools.CompoundWordTableCompiler;
 
-import org.apache.lucene.util.LuceneTestCase;
+import org.apache.lucene.tests.util.LuceneTestCase;
 import org.junit.Test;
 
 /**

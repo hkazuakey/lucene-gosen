@@ -22,7 +22,7 @@ import java.io.IOException;
 import net.java.sen.SenTestUtil;
 
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.BaseTokenStreamTestCase;
+import org.apache.lucene.tests.analysis.BaseTokenStreamTestCase;
 import org.junit.Test;
 
 /**
@@ -83,5 +83,54 @@ public class TestGosenAnalyzer extends BaseTokenStreamTestCase {
   public void testReliability() throws IOException {
     Analyzer analyzer = new GosenAnalyzer(SenTestUtil.IPADIC_DIR);
     checkRandomData(random(), analyzer, 10000*RANDOM_MULTIPLIER);
+  }
+
+  @Test
+  public void testDefaultConstructor() throws IOException {
+    // GosenAnalyzer() uses bundled dictionary (null dictionaryDir)
+    GosenAnalyzer analyzer = new GosenAnalyzer();
+    assertNotNull(analyzer);
+    analyzer.close();
+  }
+
+  @Test
+  public void testGetDefaultStopSet() {
+    assertNotNull(GosenAnalyzer.getDefaultStopSet());
+    assertFalse(GosenAnalyzer.getDefaultStopSet().isEmpty());
+  }
+
+  @Test
+  public void testGetDefaultStopTags() {
+    assertNotNull(GosenAnalyzer.getDefaultStopTags());
+    assertFalse(GosenAnalyzer.getDefaultStopTags().isEmpty());
+  }
+
+  @Test
+  public void testStemExclusionSet() throws IOException {
+    // Constructor with stemExclusionSet exercises the SetKeywordMarkerFilter branch
+    org.apache.lucene.analysis.CharArraySet exclusionSet = new org.apache.lucene.analysis.CharArraySet(1, true);
+    exclusionSet.add("落ちた");
+    GosenAnalyzer analyzer = new GosenAnalyzer(
+        (org.apache.lucene.analysis.CharArraySet) GosenAnalyzer.getDefaultStopSet(),
+        GosenAnalyzer.getDefaultStopTags(),
+        exclusionSet,
+        SenTestUtil.IPADIC_DIR
+    );
+    assertNotNull(analyzer);
+    analyzer.close();
+  }
+
+  @Test
+  public void testFullConstructor() throws IOException {
+    GosenAnalyzer analyzer = new GosenAnalyzer(
+        (org.apache.lucene.analysis.CharArraySet) GosenAnalyzer.getDefaultStopSet(),
+        GosenAnalyzer.getDefaultStopTags(),
+        org.apache.lucene.analysis.CharArraySet.EMPTY_SET,
+        SenTestUtil.IPADIC_DIR,
+        false
+    );
+    assertAnalyzesTo(analyzer, "多くの学生が試験に落ちた。",
+        new String[] { "多く", "学生", "試験", "落ちる" }
+    );
   }
 }

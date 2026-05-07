@@ -19,7 +19,6 @@ package org.apache.lucene.analysis.gosen;
 
 import com.ibm.icu.text.Normalizer2;
 import org.apache.lucene.analysis.charfilter.BaseCharFilter;
-import org.apache.lucene.analysis.util.RollingCharBuffer;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -40,7 +39,6 @@ public class GosenNormalizerCharFilter extends BaseCharFilter {
   public static String DEFAULT_NORM_FORM = "nfkc";
 
   private final Normalizer2 normalizer;
-  private final RollingCharBuffer buffer = new RollingCharBuffer();
   private Reader normalizedInput;
 
   /**
@@ -62,7 +60,6 @@ public class GosenNormalizerCharFilter extends BaseCharFilter {
   public GosenNormalizerCharFilter(Reader reader, String name, Normalizer2.Mode mode) {
     super(reader);
     this.normalizer = Normalizer2.getInstance(null, name, mode);
-    buffer.reset(input);
   }
 
   private static char[] replaceSpecialCharacters(char[] inBuffer, int len) {

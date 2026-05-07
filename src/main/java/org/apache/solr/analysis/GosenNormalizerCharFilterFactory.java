@@ -19,7 +19,7 @@ package org.apache.solr.analysis;
 
 import com.ibm.icu.text.Normalizer2;
 import org.apache.lucene.analysis.gosen.GosenNormalizerCharFilter;
-import org.apache.lucene.analysis.util.CharFilterFactory;
+import org.apache.lucene.analysis.CharFilterFactory;
 
 import java.io.Reader;
 import java.util.Map;
@@ -56,8 +56,8 @@ public class GosenNormalizerCharFilterFactory extends CharFilterFactory {
   public GosenNormalizerCharFilterFactory(Map<String, String> args) {
     super(args);
 
-    String strName = args.get("name");
-    String strMode = args.get("mode");
+    String strName = args.remove("name");
+    String strMode = args.remove("mode");
 
     if (strName == null) {
       strNormForm = DEFAULT_NORM_FORM;
@@ -74,6 +74,9 @@ public class GosenNormalizerCharFilterFactory extends CharFilterFactory {
       normMode = Normalizer2.Mode.DECOMPOSE;
     } else {
       throw new IllegalArgumentException("Invalid mode: " + strMode);
+    }
+    if (!args.isEmpty()) {
+      throw new IllegalArgumentException("Unknown parameters: " + args);
     }
   }
 

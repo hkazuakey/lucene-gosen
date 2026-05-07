@@ -31,7 +31,7 @@ import net.java.sen.dictionary.SentenceIterator;
 import net.java.sen.dictionary.Token;
 import net.java.sen.dictionary.Viterbi;
 
-import org.apache.lucene.util.LuceneTestCase;
+import org.apache.lucene.tests.util.LuceneTestCase;
 import org.junit.Test;
 import static net.java.sen.SenTestUtil.*;
 

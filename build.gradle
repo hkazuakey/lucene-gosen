@@ -1,37 +1,72 @@
 repositories {
   mavenLocal()
   mavenCentral()
-  maven {
-    url "http://maven.restlet.com"
-  }
 }
 group 'com.github.lucene-gosen'
 description 'Japanese analysis for Apache Lucene/Solr'
 
 apply plugin: 'java'
+apply plugin: 'jacoco'
 apply plugin: 'idea'
 
 version = luceneVersion
 
-dependencies {
-  compile "org.apache.lucene:lucene-core:${luceneVersion}"
-  compile "org.apache.lucene:lucene-analyzers-common:${luceneVersion}"
-  compile "org.apache.lucene:lucene-codecs:${luceneVersion}"
-  compile "com.ibm.icu:icu4j:${icu4jVersion}"
-  compile "org.restlet.jee:org.restlet:${restletVersion}"
-  compile "org.restlet.jee:org.restlet.ext.servlet:${restletVersion}"
-
-  testCompile "junit:junit:${junitVersion}"
-  testCompile "org.apache.lucene:lucene-test-framework:${luceneVersion}"
-  testCompile "com.carrotsearch.randomizedtesting:randomizedtesting-runner:${randomizedrunnerVersion}"
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(21)
+  }
 }
 
-jar {
-  version version
+tasks.withType(JavaCompile).configureEach {
+  options.encoding = 'UTF-8'
+}
+
+dependencies {
+  implementation "org.apache.lucene:lucene-core:${luceneVersion}"
+  implementation "org.apache.lucene:lucene-analysis-common:${luceneVersion}"
+  implementation "org.apache.lucene:lucene-codecs:${luceneVersion}"
+  implementation "com.ibm.icu:icu4j:${icu4jVersion}"
+
+  testImplementation "junit:junit:${junitVersion}"
+  testImplementation "org.apache.lucene:lucene-test-framework:${luceneVersion}"
+  testImplementation "com.carrotsearch.randomizedtesting:randomizedtesting-runner:${randomizedrunnerVersion}"
 }
 
 javadoc {
   options.locale = 'en_US'
+}
+
+jacocoTestReport {
+  reports {
+    xml.required = true
+    html.required = true
+  }
+  afterEvaluate {
+    classDirectories.setFrom(files(classDirectories.files.collect {
+      fileTree(dir: it, exclude: [
+        'net/java/sen/compiler/**',
+        'net/java/sen/tools/**',
+      ])
+    }))
+  }
+}
+
+jacocoTestCoverageVerification {
+  afterEvaluate {
+    classDirectories.setFrom(files(classDirectories.files.collect {
+      fileTree(dir: it, exclude: [
+        'net/java/sen/compiler/**',
+        'net/java/sen/tools/**',
+      ])
+    }))
+  }
+  violationRules {
+    rule {
+      limit {
+        minimum = 0.90
+      }
+    }
+  }
 }
 defaultTasks 'clean', 'dist'
 
@@ -55,7 +90,7 @@ tasks.rebuildIpadicDic.dependsOn(compileJava, ":dictionary:cleanCompiledIpadic",
 
 // Create Jar library without dictionary
 task jarWithNaistChasen(type: Jar) {
-  classifier naistDictype
+  archiveClassifier = naistDictype
   from files(sourceSets.main.output,
           fileTree("dictionary" + File.separator
             + naistDictype + File.separator + compiledDicDir).include('**/*.sen')
@@ -65,7 +100,7 @@ task jarWithNaistChasen(type: Jar) {
 tasks.jarWithNaistChasen.dependsOn(compileJava, ":dictionary:compileNaistChasen")
 
 task jarWithIpadic(type: Jar) {
-  classifier ipadicDictype
+  archiveClassifier = ipadicDictype
   from files(sourceSets.main.output,
           fileTree("dictionary" + File.separator
                   + ipadicDictype + File.separator + compiledDicDir).include('**/*.sen')
@@ -75,12 +110,12 @@ task jarWithIpadic(type: Jar) {
 tasks.jarWithIpadic.dependsOn(compileJava, ":dictionary:compileIpadic")
 
 task javadocJar(type: Jar) {
-  classifier 'javadoc'
+  archiveClassifier = 'javadoc'
   from javadoc
 }
 
 task sourcesJar(type: Jar) {
-  classifier 'sources'
+  archiveClassifier = 'sources'
   from sourceSets.main.allSource
 }
 

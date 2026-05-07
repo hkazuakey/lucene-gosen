@@ -19,7 +19,7 @@ package org.apache.lucene.analysis.gosen;
 
 import java.text.CharacterIterator;
 
-import org.apache.lucene.util.LuceneTestCase;
+import org.apache.lucene.tests.util.LuceneTestCase;
 import org.junit.Test;
 
 public class TestCharArrayIterator extends LuceneTestCase {

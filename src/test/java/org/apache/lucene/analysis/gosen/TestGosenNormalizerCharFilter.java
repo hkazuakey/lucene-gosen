@@ -3,8 +3,8 @@
  */
 package org.apache.lucene.analysis.gosen;
 
-import org.apache.lucene.analysis.BaseTokenStreamTestCase;
-import org.apache.lucene.analysis.MockTokenizer;
+import org.apache.lucene.tests.analysis.BaseTokenStreamTestCase;
+import org.apache.lucene.tests.analysis.MockTokenizer;
 import org.apache.lucene.analysis.Tokenizer;
 import org.junit.Test;
 

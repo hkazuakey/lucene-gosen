@@ -30,7 +30,7 @@ import net.java.sen.trie.CharIterator;
 import net.java.sen.trie.TrieBuilder;
 import net.java.sen.trie.TrieSearcher;
 
-import org.apache.lucene.util.LuceneTestCase;
+import org.apache.lucene.tests.util.LuceneTestCase;
 import org.junit.Test;
 
 /**

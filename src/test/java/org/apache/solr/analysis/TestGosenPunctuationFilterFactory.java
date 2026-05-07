@@ -17,10 +17,17 @@
 
 package org.apache.solr.analysis;
 
-import org.apache.lucene.util.LuceneTestCase;
+import net.java.sen.SenTestUtil;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.Tokenizer;
+import org.apache.lucene.analysis.gosen.GosenTokenizer;
+import org.apache.lucene.tests.util.LuceneTestCase;
 import org.junit.Test;
 
+import java.io.StringReader;
 import java.util.HashMap;
+
+import static org.apache.lucene.tests.analysis.BaseTokenStreamTestCase.assertTokenStreamContents;
 
 public class TestGosenPunctuationFilterFactory extends LuceneTestCase {
 
@@ -34,5 +41,27 @@ public class TestGosenPunctuationFilterFactory extends LuceneTestCase {
     } catch (IllegalArgumentException expected) {
       assertTrue(expected.getMessage().contains("Unknown parameters"));
     }
+  }
+
+  @Test
+  public void testLegacyArgument() throws Exception {
+    try {
+      new GosenPunctuationFilterFactory(new HashMap<String, String>() {{
+        put("enablePositionIncrements", "true");
+      }});
+      fail();
+    } catch (IllegalArgumentException expected) {
+      assertTrue(expected.getMessage().contains("enablePositionIncrements"));
+    }
+  }
+
+  @Test
+  public void testCreate() throws Exception {
+    GosenPunctuationFilterFactory factory = new GosenPunctuationFilterFactory(new HashMap<>());
+    Tokenizer tokenizer = new GosenTokenizer(null, SenTestUtil.IPADIC_DIR, false);
+    tokenizer.setReader(new StringReader("私は学生です。"));
+    TokenStream stream = factory.create(tokenizer);
+    assertNotNull(stream);
+    assertTokenStreamContents(stream, new String[]{"私", "は", "学生", "です"});
   }
 }

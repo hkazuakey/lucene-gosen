@@ -1,3 +1,8 @@
+## Requirements
+
+* Java 21 or later (tested with JDK 21)
+* Apache Lucene / Solr 10.x
+
 ## Download from Maven Central
 
 * group id : com.github.lucene-gosen
@@ -5,11 +10,11 @@
 
 There are three types of jar files:
 
-* lucene-gosen-<version>.jar : Only java library, not include dictionary.
-* lucene-gosen-<version>-ipadic.jar : Java library with IPA dictionary.
-* lucene-gosen-<version>-naist-chasen.jar : Java library with Naist Chasen dictionary
+* lucene-gosen-\<version>.jar : Only java library, not include dictionary.
+* lucene-gosen-\<version>-ipadic.jar : Java library with IPA dictionary.
+* lucene-gosen-\<version>-naist-chasen.jar : Java library with Naist Chasen dictionary
 
-## Installation With Apache Solr 7.4.0:
+## Installation With Apache Solr 10.x:
 
 1. Download jar file from Maven Central Repository
 2. Create <your_solr_home>/<collection_dir>/lib and put this jar file in it.
@@ -19,7 +24,7 @@ There are three types of jar files:
 Please refer to `example/` for an example japanese configuration with comments explaining
    what the various configuration options are.
 
-## Installation with Apache Lucene 7.4.0:
+## Installation with Apache Lucene 10.x:
 
 ### Using Maven
 
@@ -30,7 +35,7 @@ Add dependency to pom.xml.
         <dependency>
             <groupId>com.github.lucene-gosen</groupId>
             <artifactId>lucene-gosen</artifactId>
-            <version>7.4.0</version>
+            <version>10.4.0</version>
             <classifier>ipadic</classifier>
         </dependency>
         ...
@@ -41,7 +46,7 @@ Add dependency to pom.xml.
 
 1. Download jar file from Maven Central Repository
 2. Add this jar file to your classpath, and use GosenAnalyzer, or make your own analyzer from
-   the various filters. Its recommended you extend ReusableAnalyzerBase to make any custom analyzer!
+   the various filters. Its recommended you extend Analyzer to make any custom analyzer!
 
 ## Build
 
@@ -56,7 +61,7 @@ $ ./gradlew jar
 Build jar file with IPA dictionary
 
 ```
-$ ./gradlew jarWithIpaDic
+$ ./gradlew jarWithIpadic
 ```
 
 Build jar file with Naist Chasen dictionary
@@ -65,8 +70,8 @@ Build jar file with Naist Chasen dictionary
 $ ./gradlew jarWithNaistChasen
 ```
 
-Please note that you should modify the following line in `gradle.properties` if you want to build the Gosen for Solr 7.1 or before. 
+Please note that you should modify the following line in `gradle.properties` if you want to target a different Lucene version.
 
 ```
-luceneVersion = 7.4.0
+luceneVersion = 10.4.0
 ```
