@@ -46,7 +46,7 @@ Add dependency to pom.xml.
 
 1. Download jar file from Maven Central Repository
 2. Add this jar file to your classpath, and use GosenAnalyzer, or make your own analyzer from
-   the various filters. Its recommended you extend ReusableAnalyzerBase to make any custom analyzer!
+   the various filters. Its recommended you extend Analyzer to make any custom analyzer!
 
 ## Build
 
@@ -61,7 +61,7 @@ $ ./gradlew jar
 Build jar file with IPA dictionary
 
 ```
-$ ./gradlew jarWithIpaDic
+$ ./gradlew jarWithIpadic
 ```
 
 Build jar file with Naist Chasen dictionary
