@@ -1,6 +1,6 @@
 ## Requirements
 
-* Java 11 or later (tested with JDK 25)
+* Java 21 or later (tested with JDK 21)
 * Apache Lucene / Solr 10.x
 
 ## Download from Maven Central
